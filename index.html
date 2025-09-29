@@ -11,6 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+    <!-- Modular CSS Files -->
+    <link rel="stylesheet" href="src/css/styles.css">
+    <link rel="stylesheet" href="src/css/animations.css">
+
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -554,7 +559,20 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        // Import modular JavaScript files
+        import('./src/js/modules/math-utils.js')
+            .then(module => { window.MathUtils = module.default || module; })
+            .catch(err => console.error('Failed to load math-utils.js:', err));
+
+        import('./src/js/modules/quiz-manager.js')
+            .then(module => { window.QuizManager = module.default || module; })
+            .catch(err => console.error('Failed to load quiz-manager.js:', err));
+
+        import('./src/js/data/questions.js')
+            .then(module => { window.QuestionDatabase = module.default || module; })
+            .catch(err => console.error('Failed to load questions.js:', err));
+
         const allQuestions = [
             // (25 questions from previous context, redacted for brevity)
             { question: "Tres luces intermitentes se encienden a intervalos de 4, 6 y 10 segundos. Si coinciden a las 7:00 p.m., ¿después de cuántos segundos volverán a coincidir?", answers: [ { text: "60 segundos", correct: true, explanation: "¡Correcto! Se busca un 'punto de encuentro' futuro, lo que requiere el Mínimo Común Múltiplo (mcm). El mcm de 4, 6 y 10 es 60." }, { text: "2 segundos", correct: false, explanation: "Incorrecto. Este valor es el Máximo Común Divisor (mcd) de 4 y 6. El mcd se usa para 'dividir' o 'repartir' en partes iguales, no para encontrar futuras coincidencias." }, { text: "120 segundos", correct: false, explanation: "Incorrecto. Aunque 120 es un múltiplo común de los tres números, no es el *mínimo*. El mcm es el primer punto en el que coinciden, que es 60." } ] },
@@ -594,6 +612,18 @@
             "La perseverancia es clave para el éxito.",
             "Confía en tu proceso de aprendizaje."
         ];
+
+        // Initialize QuizManager instance (will be available after module loads)
+        let quizManager = null;
+
+        // Initialize QuizManager when modules are loaded
+        setTimeout(() => {
+            if (window.QuizManager) {
+                quizManager = new window.QuizManager();
+                setupQuizCallbacks();
+                console.log('✅ QuizManager initialized successfully');
+            }
+        }, 100);
 
         // Gamification variables
         const userProfile = {
@@ -708,10 +738,15 @@
         }
 
         function startGame() {
+            if (!quizManager) {
+                console.error('QuizManager not initialized yet');
+                return;
+            }
+
             questionCount = parseInt(questionCountInput.value, 10);
             timePerQuestion = parseInt(timeLimitInput.value, 10);
             questionOrder = questionOrderInput.value;
-            
+
             if(isNaN(questionCount) || questionCount < 1 || questionCount > allQuestions.length) {
                 questionCount = allQuestions.length;
                 questionCountInput.value = questionCount;
@@ -721,42 +756,32 @@
                 timeLimitInput.value = timePerQuestion;
             }
 
-            if (questionOrder === 'random') {
-                quizQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, questionCount);
-            } else {
-                quizQuestions = allQuestions.slice(0, questionCount);
-            }
+            // Configure QuizManager
+            quizManager.configure({
+                questionCount: questionCount,
+                timeLimit: timePerQuestion,
+                questionOrder: questionOrder
+            });
 
+            // Reset UI
             startScreen.classList.add('hidden');
             studyMaterialContainer.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
-            
-            currentQuestionIndex = 0;
+
+            // Reset game state
             score = 0;
             correctStreak = 0;
             mcmCorrect = 0;
             mcdCorrect = 0;
             scoreDisplay.textContent = `Puntos: ${score}`;
-            showQuestion();
+
+            // Initialize quiz with QuizManager
+            quizManager.initialize(allQuestions);
         }
 
-        function showQuestion() {
-            resetState();
-            const question = quizQuestions[currentQuestionIndex];
-            questionCounter.textContent = `${currentQuestionIndex + 1} de ${quizQuestions.length}`;
-            questionText.textContent = question.question;
-            tipText.textContent = motivationalTips[Math.floor(Math.random() * motivationalTips.length)];
-
-
-            question.answers.forEach((answer, index) => {
-                const button = answerButtons[index];
-                button.textContent = answer.text;
-                button.dataset.correct = answer.correct;
-            });
-            
-            startTimer();
-        }
+        // showQuestion function is now handled by QuizManager callbacks
+        // Keeping for compatibility but will be removed in future version
 
         function resetState() {
             answerButtons.forEach(button => {
@@ -767,86 +792,31 @@
             tipText.textContent = '';
         }
         
-        function startTimer() {
-            timeLeft = timePerQuestion;
-            timerBar.style.transition = 'none';
-            timerBar.style.width = '100%';
-            void timerBar.offsetWidth; 
-            timerBar.style.transition = `width ${timePerQuestion}s linear`;
-            timerBar.style.width = '0%';
-
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeOut();
-                }
-            }, 1000);
-        }
+        // startTimer function is now handled by QuizManager
+        // Timer updates come through onTimeUpdate callback
         
-        function handleTimeOut() {
-            correctStreak = 0;
-            const correctAnswer = quizQuestions[currentQuestionIndex].answers.find(a => a.correct);
-            feedbackText.textContent = `¡Tiempo! La respuesta era: ${correctAnswer.text}`;
-            feedbackText.classList.add('text-red-500');
-            showCorrectAnswer();
-            disableButtons();
-        }
+        // handleTimeOut is now handled by QuizManager through onAnswerSelected callback
 
         function selectAnswer(e) {
-            clearInterval(timerInterval);
-            timerBar.style.width = timerBar.style.width;
+            if (!quizManager) {
+                console.error('QuizManager not initialized');
+                return;
+            }
 
             const selectedButton = e.target;
-            const isCorrect = selectedButton.dataset.correct === 'true';
+            const answerIndex = Array.from(answerButtons).indexOf(selectedButton);
 
-            disableButtons();
+            // Clear existing timer and let QuizManager handle timing
+            clearInterval(timerInterval);
 
-            if (isCorrect) {
-                addXP(10); // +10 XP for correct answer
-                score += 100;
-                correctStreak++;
-                scoreDisplay.textContent = `Puntos: ${score}`;
-                selectedButton.classList.add('correct-answer');
-                feedbackText.textContent = '¡Correcto!';
-                feedbackText.classList.remove('text-red-500', 'text-yellow-400');
-                feedbackText.classList.add('text-green-500');
-                
-                // Check achievements
-                if (timeLeft >= (timePerQuestion - 15)) {
-                    unlockAchievement('SPEEDSTER');
-                }
-                if (correctStreak >= 3) {
-                     unlockAchievement('STREAK_3');
-                }
-                const qText = quizQuestions[currentQuestionIndex].question.toLowerCase();
-                if (qText.includes('mcm') || qText.includes('múltiplo') || qText.includes('coincidir') || qText.includes('encontrar')) {
-                    mcmCorrect++;
-                    if (mcmCorrect >= 5) unlockAchievement('MCM_MASTER');
-                }
-                if (qText.includes('mcd') || qText.includes('divisor') || qText.includes('cortar') || qText.includes('dividir') || qText.includes('más grande') || qText.includes('mayor')) {
-                    mcdCorrect++;
-                    if (mcdCorrect >= 5) unlockAchievement('MCD_EXPERT');
-                }
+            // Add visual feedback to selected button
+            selectedButton.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                selectedButton.style.transform = '';
+            }, 150);
 
-            } else {
-                correctStreak = 0;
-                selectedButton.classList.add('wrong-answer');
-                const correctAnswer = quizQuestions[currentQuestionIndex].answers.find(a => a.correct);
-                const hint = correctAnswer.explanation.split('!')[1].split('.')[0] + ".";
-                
-                feedbackText.textContent = `Incorrecto. Pista: ${hint}`;
-                feedbackText.classList.remove('text-green-500', 'text-red-500');
-                feedbackText.classList.add('text-yellow-400');
-
-                setTimeout(() => {
-                    feedbackText.textContent = `La respuesta es: ${correctAnswer.text}.`;
-                    feedbackText.classList.remove('text-yellow-400');
-                    feedbackText.classList.add('text-red-500');
-                    showCorrectAnswer();
-                }, 3000);
-            }
+            // Let QuizManager process the answer
+            quizManager.selectAnswer(answerIndex);
         }
         
         function disableButtons() {
@@ -867,14 +837,7 @@
             });
         }
         
-        function showNextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < quizQuestions.length) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
+        // showNextQuestion is now handled by QuizManager.nextQuestion()
         
         function showResults() {
             unlockAchievement('FIRST_QUIZ');
@@ -888,7 +851,78 @@
             finalSummary.textContent = `Obtuviste ${correctCount} de ${quizQuestions.length} correctas.`;
             xpGainText.textContent = `+${(correctCount * 10) + bonusXP} XP ¡Bono por completar!`;
         }
-        
+
+        // Setup callbacks for QuizManager integration
+        function setupQuizCallbacks() {
+            if (!quizManager) return;
+
+            quizManager.setCallbacks({
+                onQuestionChange: (data) => {
+                    // Update UI with new question data
+                    questionCounter.textContent = `${data.index + 1} de ${data.total}`;
+                    questionText.textContent = data.question.question;
+                    tipText.textContent = motivationalTips[Math.floor(Math.random() * motivationalTips.length)];
+
+                    // Setup answer buttons
+                    data.question.answers.forEach((answer, index) => {
+                        const button = answerButtons[index];
+                        button.textContent = answer.text;
+                        button.dataset.correct = answer.correct;
+                    });
+
+                    resetState();
+                },
+
+                onScoreUpdate: (newScore, points) => {
+                    score = newScore;
+                    scoreElement.textContent = score;
+
+                    // Add XP for gamification
+                    addXP(Math.floor(points / 10));
+                },
+
+                onTimeUpdate: (timeRemaining, totalTime) => {
+                    // Update timer bar
+                    const percentage = (timeRemaining / totalTime) * 100;
+                    timerBar.style.width = `${percentage}%`;
+                },
+
+                onAnswerSelected: (result) => {
+                    // Show feedback
+                    if (result.isCorrect) {
+                        feedbackText.textContent = result.explanation;
+                        feedbackText.classList.remove('text-red-500');
+                        feedbackText.classList.add('text-green-400');
+                    } else {
+                        feedbackText.textContent = result.explanation;
+                        feedbackText.classList.remove('text-green-400');
+                        feedbackText.classList.add('text-red-500');
+                    }
+
+                    showCorrectAnswer();
+                    disableButtons();
+
+                    // Auto advance after 3 seconds
+                    setTimeout(() => {
+                        quizManager.nextQuestion();
+                    }, 3000);
+                },
+
+                onQuizComplete: (stats) => {
+                    // Show results using stats from QuizManager
+                    unlockAchievement('FIRST_QUIZ');
+                    const bonusXP = 50;
+                    addXP(bonusXP);
+
+                    quizScreen.classList.add('hidden');
+                    resultsScreen.classList.remove('hidden');
+                    finalScore.textContent = stats.finalScore;
+                    finalSummary.textContent = `Obtuviste ${stats.correctAnswers} de ${stats.totalQuestions} correctas. Precisión: ${stats.accuracy}%`;
+                    xpGainText.textContent = `+${(stats.correctAnswers * 10) + bonusXP} XP ¡Bono por completar!`;
+                }
+            });
+        }
+
         function showProblems() {
             let html = '<h2 class="text-3xl font-bold mb-4 text-center font-title">Banco de Problemas</h2>';
             allQuestions.forEach((q, index) => {
@@ -1856,6 +1890,11 @@
         }
 
         function exitQuiz() {
+            // Exit quiz through QuizManager if available
+            if (quizManager) {
+                quizManager.exitQuiz();
+            }
+
             // Clear timer
             clearInterval(timerInterval);
 
@@ -1934,7 +1973,11 @@
             updateProfileUI();
             startGame();
         });
-        nextButton.addEventListener('click', showNextQuestion);
+        nextButton.addEventListener('click', () => {
+            if (quizManager) {
+                quizManager.nextQuestion();
+            }
+        });
         studyGuideBtn.addEventListener('click', showStudyGuide);
         viewProblemsBtn.addEventListener('click', showProblems);
         viewSolutionsBtn.addEventListener('click', showSolutions);

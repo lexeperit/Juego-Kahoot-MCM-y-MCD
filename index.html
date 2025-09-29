@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Montserrat', sans-serif;
@@ -52,6 +52,10 @@
         .timer-bar {
             transition: width 1s linear;
         }
+        #study-material-container {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body class="kahoot-bg min-h-screen flex items-center justify-center p-4">
@@ -62,13 +66,41 @@
         <div id="start-screen">
             <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-4">Desafío</h1>
             <h2 class="text-4xl md:text-6xl font-bold mb-8">MCM y MCD</h2>
-            <p class="text-xl mb-12">¿Estás listo para probar tus conocimientos al estilo EXANI-II?</p>
-            <button id="start-button" class="bg-white text-gray-800 text-3xl font-bold py-4 px-12 rounded-lg shadow-2xl hover:bg-gray-200 transition-transform transform hover:scale-105">
+            
+            <!-- Configuración del Quiz -->
+            <div class="bg-white/10 p-6 rounded-lg mb-8 max-w-lg mx-auto">
+                <h3 class="text-2xl font-bold mb-4">Configuración</h3>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                    <div>
+                        <label for="question-count" class="font-bold block mb-1">Nº de Preguntas:</label>
+                        <input type="number" id="question-count" value="10" min="1" max="10" class="w-24 text-center text-black font-bold p-2 rounded">
+                    </div>
+                    <div>
+                        <label for="time-limit" class="font-bold block mb-1">Segundos por Pregunta:</label>
+                        <input type="number" id="time-limit" value="90" min="10" step="5" class="w-24 text-center text-black font-bold p-2 rounded">
+                    </div>
+                </div>
+            </div>
+
+            <button id="start-button" class="bg-white text-gray-800 text-3xl font-bold py-4 px-12 rounded-lg shadow-2xl hover:bg-gray-200 transition-transform transform hover:scale-105 mb-8">
                 ¡Empezar!
             </button>
+
+            <!-- Herramientas de Estudio -->
+            <div class="flex justify-center gap-4 mt-4">
+                <button id="view-problems-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">Ver Problemas</button>
+                <button id="view-solutions-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Ver Soluciones</button>
+            </div>
         </div>
 
-        <!-- Pantalla del Quiz -->
+        <!-- Contenedor para material de estudio -->
+        <div id="study-material-container" class="hidden bg-white text-gray-800 rounded-lg p-6 text-left">
+            <div id="study-content"></div>
+            <button id="close-study-btn" class="mt-6 bg-red-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-700 w-full">Cerrar</button>
+        </div>
+
+
+        <!-- Pantalla del Quiz (sin cambios) -->
         <div id="quiz-screen" class="hidden">
             <!-- Header del Quiz -->
             <div class="flex justify-between items-center bg-white text-gray-800 p-4 rounded-t-lg">
@@ -76,7 +108,6 @@
                 <div class="text-2xl font-black">Desafío MCM y MCD</div>
                 <div id="score" class="text-xl font-bold">Puntos: 0</div>
             </div>
-
             <!-- Pregunta y Timer -->
             <div class="bg-gray-800 p-8">
                 <div id="timer-container" class="w-full bg-gray-600 rounded-full h-4 mb-6">
@@ -84,7 +115,6 @@
                 </div>
                 <h2 id="question-text" class="text-2xl md:text-3xl font-bold mb-8 min-h-[100px]">Cargando pregunta...</h2>
             </div>
-            
             <!-- Opciones de Respuesta -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-gray-800 rounded-b-lg">
                 <button data-option="0" class="answer-btn btn-shape btn-red rounded-lg h-32"></button>
@@ -96,7 +126,7 @@
             <div id="feedback-text" class="mt-4 text-xl font-bold h-8"></div>
         </div>
 
-        <!-- Pantalla de Resultados -->
+        <!-- Pantalla de Resultados (sin cambios) -->
         <div id="results-screen" class="hidden">
             <h1 class="text-5xl font-black mb-4">¡Juego Terminado!</h1>
             <div class="bg-white text-gray-800 rounded-lg p-8 text-center shadow-2xl">
@@ -111,128 +141,146 @@
     </div>
 
     <script>
-        const questions = [
+        const allQuestions = [
             {
                 question: "Tres luces intermitentes se encienden a intervalos de 4, 6 y 10 segundos. Si coinciden a las 7:00 p.m., ¿después de cuántos segundos volverán a coincidir?",
                 answers: [
-                    { text: "60 segundos", correct: true },
-                    { text: "2 segundos", correct: false },
-                    { text: "120 segundos", correct: false }
-                ],
-                explanation: "Se busca un 'punto de encuentro' futuro, por lo que se usa el mcm. El mcm(4, 6, 10) es 60."
+                    { text: "60 segundos", correct: true, explanation: "¡Correcto! Se busca un 'punto de encuentro' futuro, lo que requiere el Mínimo Común Múltiplo (mcm). El mcm de 4, 6 y 10 es 60." },
+                    { text: "2 segundos", correct: false, explanation: "Incorrecto. Este valor es el Máximo Común Divisor (mcd) de 4 y 6. El mcd se usa para 'dividir' o 'repartir' en partes iguales, no para encontrar futuras coincidencias." },
+                    { text: "120 segundos", correct: false, explanation: "Incorrecto. Aunque 120 es un múltiplo común de los tres números, no es el *mínimo*. El mcm es el primer punto en el que coinciden, que es 60." }
+                ]
             },
             {
                 question: "Un carpintero quiere cortar dos listones de madera de 90 cm y 120 cm en trozos de igual longitud, lo más largos posible. ¿Cuál debe ser la longitud de cada trozo?",
                 answers: [
-                    { text: "10 cm", correct: false },
-                    { text: "360 cm", correct: false },
-                    { text: "30 cm", correct: true }
-                ],
-                explanation: "Se busca 'dividir' en partes iguales y máximas, por lo que se usa el mcd. El mcd(90, 120) es 30."
+                    { text: "10 cm", correct: false, explanation: "Incorrecto. Aunque 10 cm es un divisor común de 90 y 120, no es el *máximo* posible. Se pueden hacer trozos más grandes." },
+                    { text: "360 cm", correct: false, explanation: "Incorrecto. Este valor es el mcm. No puedes cortar un listón de 90 cm en trozos de 360 cm. El mcm se usa para encontrar múltiplos, no divisores." },
+                    { text: "30 cm", correct: true, explanation: "¡Correcto! Se busca 'dividir' en partes iguales y lo 'más largas posible', lo que indica que se necesita el Máximo Común Divisor (mcd). El mcd de 90 y 120 es 30." }
+                ]
             },
             {
                 question: "Calcule el Máximo Común Divisor (mcd) de 24, 36 y 48.",
                 answers: [
-                    { text: "12", correct: true },
-                    { text: "144", correct: false },
-                    { text: "6", correct: false }
-                ],
-                explanation: "El número más grande que divide a los tres exactamente es 12."
+                    { text: "12", correct: true, explanation: "¡Correcto! El 12 es el número más grande que puede dividir exactamente a 24 (12x2), 36 (12x3) y 48 (12x4)." },
+                    { text: "144", correct: false, explanation: "Incorrecto. Este valor es el mcm de los tres números. El mcd debe ser menor o igual al número más pequeño del grupo (24)." },
+                    { text: "6", correct: false, explanation: "Incorrecto. Aunque 6 es un divisor común, no es el *máximo*. El 12 también es un divisor común y es más grande." }
+                ]
             },
             {
                 question: "Un paciente toma un jarabe cada 6 horas y una pastilla cada 8 horas. Si tomó ambos a las 9:00 a.m., ¿a qué hora volverá a tomar ambos medicamentos juntos?",
                 answers: [
-                    { text: "A las 9:00 a.m. del siguiente día", correct: true },
-                    { text: "A la 1:00 p.m. del mismo día", correct: false },
-                    { text: "A las 3:00 a.m. del día siguiente", correct: false }
-                ],
-                explanation: "El mcm(6, 8) es 24. Coincidirán 24 horas después, es decir, a las 9:00 a.m. del día siguiente, pero la opción correcta más cercana en el ciclo de 12h es 9 p.m. (error en la pregunta original, ajustado a 24h=9am día siguiente)." // Corregido el razonamiento, pero las opciones se mantienen para el ejercicio. La opción A es la única que tiene sentido en un ciclo de 12 horas si la coincidencia fuera a las 12h, pero siendo 24, el espíritu es buscar el mcm. Para este examen, la coincidencia de 24 horas después nos lleva a la misma hora del día siguiente. Si el examen busca la próxima coincidencia, la opción A (9pm) es la más lógica.
+                    { text: "A las 9:00 a.m. del siguiente día", correct: true, explanation: "¡Correcto! Buscamos la próxima coincidencia en el tiempo, por lo que usamos el mcm. El mcm de 6 y 8 es 24. Por lo tanto, coincidirán 24 horas después, que es a las 9:00 a.m. del día siguiente." },
+                    { text: "A la 1:00 p.m. del mismo día", correct: false, explanation: "Incorrecto. Esto sería solo 4 horas después. 4 no es múltiplo ni de 6 ni de 8." },
+                    { text: "A las 9:00 p.m. del mismo día", correct: false, explanation: "Incorrecto. Esto es 12 horas después. A las 12 horas, habría tomado el jarabe (6x2) pero no la pastilla (8x1.5)." }
+                ]
             },
              {
                 question: "Calcule el Mínimo Común Múltiplo (mcm) de 15, 20 y 30.",
                 answers: [
-                    { text: "5", correct: false },
-                    { text: "60", correct: true },
-                    { text: "120", correct: false }
-                ],
-                explanation: "El número más pequeño que es múltiplo de los tres es 60."
+                    { text: "5", correct: false, explanation: "Incorrecto. Este es el mcd de los tres números. El mcm debe ser mayor o igual al número más grande del grupo (30)." },
+                    { text: "60", correct: true, explanation: "¡Correcto! 60 es el número más pequeño que puede ser dividido exactamente por 15 (15x4), 20 (20x3) y 30 (30x2)." },
+                    { text: "120", correct: false, explanation: "Incorrecto. 120 es un múltiplo común, pero no es el *mínimo*. El 60 también es un múltiplo común y es más pequeño." }
+                ]
             },
             {
                 question: "Se tienen 54 chocolates y 72 caramelos. Se quieren armar bolsas con la misma cantidad de cada dulce, de modo que se use el mayor número de bolsas posible. ¿Cuántos chocolates habrá en cada bolsa?",
                 answers: [
-                    { text: "18", correct: false }, // Este es el mcd, número de bolsas
-                    { text: "4", correct: false }, // Caramelos por bolsa
-                    { text: "3", correct: true } // Chocolates por bolsa
-                ],
-                explanation: "El mcd(54, 72) es 18, que es el número de bolsas. Para saber los chocolates por bolsa, se divide 54 / 18 = 3."
+                    { text: "18", correct: false, explanation: "Incorrecto. ¡Cuidado! 18 es el mcd, que representa el número total de bolsas que se pueden armar. La pregunta es cuántos *chocolates* hay en cada bolsa." },
+                    { text: "4", correct: false, explanation: "Incorrecto. Este es el número de *caramelos* por bolsa (72 caramelos / 18 bolsas = 4)." },
+                    { text: "3", correct: true, explanation: "¡Correcto! Es un problema de dos pasos. Primero, el mcd(54, 72) = 18 nos da el número de bolsas. Luego, 54 chocolates / 18 bolsas = 3 chocolates por bolsa." }
+                ]
             },
             {
                 question: "Si el mcd de dos números es 6 y su mcm es 72, y uno de los números es 18, ¿cuál es el otro número?",
                 answers: [
-                    { text: "24", correct: true },
-                    { text: "12", correct: false },
-                    { text: "36", correct: false }
-                ],
-                explanation: "Se usa la propiedad: a × b = mcd(a,b) × mcm(a,b). Entonces, 18 × b = 6 × 72. b = 432 / 18 = 24."
+                    { text: "24", correct: true, explanation: "¡Correcto! Se usa la propiedad: a × b = mcd(a,b) × mcm(a,b). Entonces, 18 × b = 6 × 72, que es 432. Despejando b: 432 / 18 = 24." },
+                    { text: "12", correct: false, explanation: "Incorrecto. Si los números fueran 18 y 12, su mcd sería 6, pero su mcm sería 36, no 72." },
+                    { text: "36", correct: false, explanation: "Incorrecto. Si los números fueran 18 y 36, su mcd sería 18, no 6." }
+                ]
             },
             {
                 question: "Ana va a la biblioteca cada 4 días y Luis va cada 5 días. Si hoy se encontraron, ¿en cuántos días volverán a encontrarse?",
                 answers: [
-                    { text: "10 días", correct: false },
-                    { text: "20 días", correct: true },
-                    { text: "9 días", correct: false }
-                ],
-                explanation: "Buscamos el próximo encuentro, por lo tanto, es el mcm. El mcm(4, 5) = 20."
+                    { text: "10 días", correct: false, explanation: "Incorrecto. En 10 días, Luis habrá ido dos veces (5x2), pero Ana no (4x2.5)." },
+                    { text: "20 días", correct: true, explanation: "¡Correcto! Se busca el próximo punto de encuentro, por lo que es el mcm. Como 4 y 5 son primos entre sí, su mcm es su producto: 4 × 5 = 20." },
+                    { text: "9 días", correct: false, explanation: "Incorrecto. Este valor es la suma de los días (4+5). La suma no tiene relevancia para encontrar una coincidencia de múltiplos." }
+                ]
             },
             {
                 question: "Calcule el mcd de 100 y 150.",
                 answers: [
-                    { text: "25", correct: false },
-                    { text: "50", correct: true },
-                    { text: "300", correct: false }
-                ],
-                explanation: "El divisor más grande que comparten 100 y 150 es 50."
+                    { text: "25", correct: false, explanation: "Incorrecto. 25 es un divisor común, pero no es el *máximo*. Hay un divisor más grande que ambos comparten." },
+                    { text: "50", correct: true, explanation: "¡Correcto! 50 es el número más grande que divide a 100 (50x2) y 150 (50x3) de forma exacta." },
+                    { text: "300", correct: false, explanation: "Incorrecto. Este es el mcm de 100 y 150. Recuerda que el mcd no puede ser más grande que los números originales." }
+                ]
             },
             {
                 question: "¿Cuál es el mcm de dos números primos diferentes, como 7 y 13?",
                 answers: [
-                    { text: "1", correct: false },
-                    { text: "Su suma (20)", correct: false },
-                    { text: "Su producto (91)", correct: true }
-                ],
-                explanation: "El mcm de dos números primos es siempre el resultado de su multiplicación."
+                    { text: "1", correct: false, explanation: "Incorrecto. El 1 es el mcd de cualquier par de números primos, no el mcm." },
+                    { text: "Su suma (20)", correct: false, explanation: "Incorrecto. La suma no se utiliza para calcular el mcm." },
+                    { text: "Su producto (91)", correct: true, explanation: "¡Correcto! Como los números primos no comparten factores (excepto el 1), su Mínimo Común Múltiplo es siempre el resultado de multiplicarlos." }
+                ]
             }
         ];
-
+        
+        let quizQuestions = [];
+        let timePerQuestion = 90;
+        let questionCount = 10;
+        
         const startScreen = document.getElementById('start-screen');
         const quizScreen = document.getElementById('quiz-screen');
         const resultsScreen = document.getElementById('results-screen');
+        const studyMaterialContainer = document.getElementById('study-material-container');
+        const studyContent = document.getElementById('study-content');
         
         const startButton = document.getElementById('start-button');
         const restartButton = document.getElementById('restart-button');
         const nextButton = document.getElementById('next-button');
+        const viewProblemsBtn = document.getElementById('view-problems-btn');
+        const viewSolutionsBtn = document.getElementById('view-solutions-btn');
+        const closeStudyBtn = document.getElementById('close-study-btn');
+        
+        const questionCountInput = document.getElementById('question-count');
+        const timeLimitInput = document.getElementById('time-limit');
 
         const questionCounter = document.getElementById('question-counter');
         const scoreDisplay = document.getElementById('score');
         const questionText = document.getElementById('question-text');
         const answerButtons = document.querySelectorAll('.answer-btn');
         const feedbackText = document.getElementById('feedback-text');
-
         const finalScore = document.getElementById('final-score');
         const finalSummary = document.getElementById('final-summary');
-        
         const timerBar = document.getElementById('timer-bar');
-        const timePerQuestion = 90; // 90 segundos
+
         let timerInterval;
         let timeLeft;
-
         let currentQuestionIndex = 0;
         let score = 0;
 
         function startGame() {
+            // Leer configuración
+            questionCount = parseInt(questionCountInput.value, 10);
+            timePerQuestion = parseInt(timeLimitInput.value, 10);
+            
+            // Validar
+            if(isNaN(questionCount) || questionCount < 1 || questionCount > allQuestions.length) {
+                questionCount = allQuestions.length;
+                questionCountInput.value = questionCount;
+            }
+             if(isNaN(timePerQuestion) || timePerQuestion < 10) {
+                timePerQuestion = 90;
+                timeLimitInput.value = timePerQuestion;
+            }
+
+            // Mezclar y seleccionar preguntas
+            quizQuestions = allQuestions.sort(() => 0.5 - Math.random()).slice(0, questionCount);
+
             startScreen.classList.add('hidden');
+            studyMaterialContainer.classList.add('hidden');
             resultsScreen.classList.add('hidden');
             quizScreen.classList.remove('hidden');
+            
             currentQuestionIndex = 0;
             score = 0;
             scoreDisplay.textContent = `Puntos: ${score}`;
@@ -241,8 +289,8 @@
 
         function showQuestion() {
             resetState();
-            const question = questions[currentQuestionIndex];
-            questionCounter.textContent = `${currentQuestionIndex + 1} de ${questions.length}`;
+            const question = quizQuestions[currentQuestionIndex];
+            questionCounter.textContent = `${currentQuestionIndex + 1} de ${quizQuestions.length}`;
             questionText.textContent = question.question;
 
             question.answers.forEach((answer, index) => {
@@ -256,8 +304,7 @@
 
         function resetState() {
             answerButtons.forEach(button => {
-                button.classList.remove('correct-answer', 'wrong-answer', 'disabled-button');
-                button.classList.remove('hidden');
+                button.classList.remove('correct-answer', 'wrong-answer', 'disabled-button', 'hidden');
             });
             nextButton.classList.add('hidden');
             feedbackText.textContent = '';
@@ -267,7 +314,6 @@
             timeLeft = timePerQuestion;
             timerBar.style.transition = 'none';
             timerBar.style.width = '100%';
-            // Forzar reflow para reiniciar la animación
             void timerBar.offsetWidth; 
             timerBar.style.transition = `width ${timePerQuestion}s linear`;
             timerBar.style.width = '0%';
@@ -281,9 +327,10 @@
                 }
             }, 1000);
         }
-
+        
         function handleTimeOut() {
-            feedbackText.textContent = "¡Se acabó el tiempo! La respuesta correcta era:";
+            const correctAnswer = quizQuestions[currentQuestionIndex].answers.find(a => a.correct);
+            feedbackText.textContent = `¡Tiempo! La respuesta era: ${correctAnswer.text}`;
             feedbackText.classList.add('text-red-500');
             showCorrectAnswer();
             disableButtons();
@@ -291,12 +338,12 @@
 
         function selectAnswer(e) {
             clearInterval(timerInterval);
-            timerBar.style.width = timerBar.style.width; // Pausa la animación
+            timerBar.style.width = timerBar.style.width;
 
             const selectedButton = e.target;
             const isCorrect = selectedButton.dataset.correct === 'true';
 
-            disableButtons(); // Deshabilitar botones inmediatamente
+            disableButtons();
 
             if (isCorrect) {
                 score += 100;
@@ -307,24 +354,22 @@
                 feedbackText.classList.add('text-green-500');
             } else {
                 selectedButton.classList.add('wrong-answer');
-                
-                const fullExplanation = questions[currentQuestionIndex].explanation;
-                // La primera oración como pista.
-                const hint = fullExplanation.split('.')[0] + ".";
+                const correctAnswer = quizQuestions[currentQuestionIndex].answers.find(a => a.correct);
+                const hint = correctAnswer.explanation.split('!')[1].split('.')[0] + ".";
                 
                 feedbackText.textContent = `Incorrecto. Pista: ${hint}`;
                 feedbackText.classList.remove('text-green-500', 'text-red-500');
                 feedbackText.classList.add('text-yellow-400');
 
                 setTimeout(() => {
-                    feedbackText.textContent = "La respuesta es: " + fullExplanation;
+                    feedbackText.textContent = `La respuesta es: ${correctAnswer.text}. ${correctAnswer.explanation}`;
                     feedbackText.classList.remove('text-yellow-400');
                     feedbackText.classList.add('text-red-500');
                     showCorrectAnswer();
-                }, 3000); // 3 segundos de retraso
+                }, 3000);
             }
         }
-
+        
         function disableButtons() {
              answerButtons.forEach(button => {
                 if (button.dataset.correct !== 'true' && !button.classList.contains('wrong-answer')) {
@@ -333,7 +378,7 @@
                 button.classList.add('disabled-button');
             });
             nextButton.classList.remove('hidden');
-            if(answerButtons.length > 2) answerButtons[2].classList.add('hidden'); // Ocultar el tercer botón para dar espacio a "Siguiente"
+            if(answerButtons.length > 2) answerButtons[2].classList.add('hidden');
         }
 
         function showCorrectAnswer() {
@@ -346,7 +391,7 @@
         
         function showNextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < questions.length) {
+            if (currentQuestionIndex < quizQuestions.length) {
                 showQuestion();
             } else {
                 showResults();
@@ -358,15 +403,56 @@
             resultsScreen.classList.remove('hidden');
             finalScore.textContent = score;
             const correctCount = score / 100;
-            finalSummary.textContent = `Obtuviste ${correctCount} de ${questions.length} correctas.`;
+            finalSummary.textContent = `Obtuviste ${correctCount} de ${quizQuestions.length} correctas.`;
+        }
+        
+        function showProblems() {
+            let html = '<h2 class="text-3xl font-bold mb-4 text-center">Banco de Problemas</h2>';
+            allQuestions.forEach((q, index) => {
+                html += `<div class="mb-4 p-2 border-b"><p class="font-bold">${index + 1}. ${q.question}</p></div>`;
+            });
+            studyContent.innerHTML = html;
+            startScreen.classList.add('hidden');
+            studyMaterialContainer.classList.remove('hidden');
+        }
+
+        function showSolutions() {
+            let html = '<h2 class="text-3xl font-bold mb-6 text-center">Solucionario Detallado</h2>';
+            allQuestions.forEach((q, index) => {
+                html += `<div class="mb-6 pb-4 border-b border-gray-300">
+                            <p class="font-bold text-lg mb-3">${index + 1}. ${q.question}</p>
+                            <ul>`;
+                q.answers.forEach(ans => {
+                    if(ans.correct) {
+                        html += `<li class="mb-2 p-2 rounded bg-green-100 border-l-4 border-green-500">
+                                    <strong class="text-green-800">${ans.text}</strong>
+                                    <p class="text-sm text-gray-700">${ans.explanation}</p>
+                                 </li>`;
+                    } else {
+                         html += `<li class="mb-2 p-2 rounded bg-red-100 border-l-4 border-red-500">
+                                    <strong class="text-red-800">${ans.text}</strong>
+                                    <p class="text-sm text-gray-700">${ans.explanation}</p>
+                                  </li>`;
+                    }
+                });
+                html += `</ul></div>`;
+            });
+            studyContent.innerHTML = html;
+            startScreen.classList.add('hidden');
+            studyMaterialContainer.classList.remove('hidden');
+        }
+
+        function closeStudyMaterial() {
+            studyMaterialContainer.classList.add('hidden');
+            startScreen.classList.remove('hidden');
         }
 
         startButton.addEventListener('click', startGame);
         restartButton.addEventListener('click', startGame);
         nextButton.addEventListener('click', showNextQuestion);
-        answerButtons.forEach(button => {
-            button.addEventListener('click', selectAnswer);
-        });
+        viewProblemsBtn.addEventListener('click', showProblems);
+        viewSolutionsBtn.addEventListener('click', showSolutions);
+        closeStudyBtn.addEventListener('click', closeStudyMaterial);
     </script>
 </body>
 </html>

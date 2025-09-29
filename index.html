@@ -1837,7 +1837,10 @@
             });
 
             // Back to guide button
-            document.getElementById('back-to-guide-btn').addEventListener('click', showStudyGuide);
+            document.getElementById('back-to-guide-btn').addEventListener('click', () => {
+                resetExerciseDisplay();
+                showStudyGuide();
+            });
 
             // Practice quiz button
             document.getElementById('practice-quiz-btn').addEventListener('click', () => {
@@ -1847,6 +1850,20 @@
 
             // Re-render MathJax content
             if (typeof MathJax !== 'undefined') MathJax.typeset();
+        }
+
+        function resetExerciseDisplay() {
+            // Show all exercise buttons
+            document.querySelectorAll('.exercise-btn').forEach(button => {
+                button.style.display = 'block';
+            });
+
+            // Hide all step contents
+            document.querySelectorAll('.step-content').forEach(step => {
+                step.style.display = 'none';
+                step.style.opacity = '0';
+                step.style.transform = 'translateY(20px)';
+            });
         }
 
         function showExerciseSteps(exerciseNum) {
@@ -1861,14 +1878,31 @@
 
             const { start: startStep, end: endStep } = exerciseSteps[exerciseNum];
 
-            // Hide button
+            // Hide all other exercise buttons first and reset their steps
+            document.querySelectorAll('.exercise-btn').forEach(button => {
+                if (button.getAttribute('data-exercise') !== exerciseNum.toString()) {
+                    button.style.display = 'block'; // Show other buttons
+                }
+            });
+
+            // Hide current exercise button
             const btn = document.querySelector(`[data-exercise="${exerciseNum}"]`);
             btn.style.display = 'none';
+
+            // Hide all steps from other exercises first
+            document.querySelectorAll('.step-content').forEach(step => {
+                const stepNum = parseInt(step.getAttribute('data-step'));
+                if (stepNum < startStep || stepNum > endStep) {
+                    step.style.display = 'none';
+                    step.style.opacity = '0';
+                }
+            });
 
             // Show steps with animation
             for (let i = startStep; i <= endStep; i++) {
                 setTimeout(() => {
-                    const stepContent = document.querySelector(`[data-step="${i}"]`);
+                    // Specifically target the step-content element, not the step-title
+                    const stepContent = document.querySelector(`[data-step="${i}"].step-content`);
                     if (stepContent) {
                         stepContent.style.display = 'block';
                         stepContent.style.opacity = '0';
@@ -1879,6 +1913,8 @@
                             stepContent.style.opacity = '1';
                             stepContent.style.transform = 'translateY(0)';
                         }, 50);
+                    } else {
+                        console.warn(`Step content with data-step="${i}" not found`);
                     }
                 }, (i - startStep) * 800);
             }

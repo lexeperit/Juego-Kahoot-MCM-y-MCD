@@ -3,130 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plataforma de Estudio: MCM y MCD</title>
+    <title>🎮 MCM & MCD Challenge - CUPREX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" id="MathJax-script" async></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --dark-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Open Sans', sans-serif;
-            background-color: #46178F;
+            font-family: 'Inter', sans-serif;
+            background: var(--primary-gradient);
             color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
         }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
         h1, h2, h3, .font-title {
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
         }
-        .kahoot-bg { background-color: #46178F; }
-        .btn-red { background-color: #E21B3C; }
-        .btn-blue { background-color: #1368CE; }
-        .btn-green { background-color: #26890C; }
-        .btn-yellow { background-color: #D89E00; }
+
+        /* Glass Morphism Effect */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .glass-strong {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Modern Button Styles */
+        .btn-modern {
+            background: var(--secondary-gradient);
+            border: none;
+            border-radius: 15px;
+            padding: 16px 32px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-modern:hover::before {
+            left: 100%;
+        }
+
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-modern:active {
+            transform: translateY(0);
+        }
+
+        /* Game Buttons */
+        .btn-red {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            border-radius: 20px;
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+            border-radius: 20px;
+        }
+        .btn-green {
+            background: linear-gradient(135deg, #55efc4 0%, #00b894 100%);
+            border-radius: 20px;
+        }
+        .btn-yellow {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+            border-radius: 20px;
+        }
+
         .btn-shape {
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 1.25rem;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            transition: transform 0.1s ease-in-out;
+            font-weight: 700;
+            font-size: 1.3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
             width: 100%;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-shape:hover { transform: scale(1.05); }
-        .correct-answer {
-            animation: pulse-green 1s ease-in-out;
-            box-shadow: 0 0 20px 5px rgba(46, 204, 113, 0.8);
+
+        .btn-shape::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%);
         }
-        .wrong-answer { opacity: 0.5; }
-        .disabled-button { pointer-events: none; }
-        @keyframes pulse-green { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        .timer-bar { transition: width 1s linear; }
-        .study-container { max-height: 85vh; overflow-y: auto; }
-        
-        /* Achievement Notification */
+
+        .btn-shape:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-shape:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-glow { animation: glow 2s ease-in-out infinite; }
+        .animate-slide-up { animation: slideInUp 0.6s ease-out; }
+        .animate-fade-left { animation: fadeInLeft 0.8s ease-out; }
+        .animate-bounce-in { animation: bounceIn 0.8s ease-out; }
+
+        /* Step Animation for Study Guide */
+        .step-item {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.6s ease;
+        }
+
+        .step-item.revealed {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .step-item:nth-child(1) { transition-delay: 0.1s; }
+        .step-item:nth-child(2) { transition-delay: 0.2s; }
+        .step-item:nth-child(3) { transition-delay: 0.3s; }
+        .step-item:nth-child(4) { transition-delay: 0.4s; }
+        .step-item:nth-child(5) { transition-delay: 0.5s; }
+
+        /* Modern Cards */
+        .modern-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .modern-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        /* XP and Progress */
+        .xp-bar-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .xp-bar {
+            background: var(--success-gradient);
+            transition: width 0.8s ease-out;
+            border-radius: 20px;
+        }
+
+        /* Achievement */
         #achievement-notification {
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-            transform: translateY(150%);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: translateY(150%) translateX(-50%);
             opacity: 0;
             position: fixed;
-            bottom: 20px;
+            bottom: 30px;
             left: 50%;
-            transform: translateX(-50%);
             z-index: 1000;
+            background: var(--warning-gradient);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
+
         #achievement-notification.show {
             transform: translateY(0) translateX(-50%);
             opacity: 1;
         }
 
-        /* XP Bar */
-        .xp-bar-container { background-color: #2c0e5a; border-radius: 9999px; overflow: hidden; }
-        .xp-bar { background-color: #39e6a3; transition: width 0.5s ease-in-out; }
+        /* Timer */
+        .timer-bar {
+            transition: width 1s linear;
+            background: var(--warning-gradient);
+            border-radius: 10px;
+        }
+
+        /* Study Container */
+        .study-container {
+            max-height: 85vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+        }
+
+        .study-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .study-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .study-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .btn-shape {
+                font-size: 1.1rem;
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 2.5rem !important;
+            }
+
+            h2 {
+                font-size: 2rem !important;
+            }
+        }
+
+        /* Icons */
+        .icon-bounce {
+            display: inline-block;
+            animation: float 2s ease-in-out infinite;
+        }
+
+        .gradient-text {
+            background: var(--secondary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .neon-glow {
+            text-shadow:
+                0 0 5px rgba(255, 255, 255, 0.8),
+                0 0 10px rgba(255, 255, 255, 0.6),
+                0 0 15px rgba(255, 255, 255, 0.4),
+                0 0 20px rgba(103, 126, 234, 0.8),
+                0 0 35px rgba(103, 126, 234, 0.6);
+        }
+
+        .correct-answer {
+            animation: pulse-success 1s ease-in-out;
+            box-shadow: 0 0 30px 10px rgba(85, 239, 196, 0.6);
+        }
+
+        .wrong-answer {
+            opacity: 0.6;
+            filter: grayscale(50%);
+        }
+
+        .disabled-button { pointer-events: none; }
+
+        @keyframes pulse-success {
+            0% { transform: scale(1); box-shadow: 0 0 30px 10px rgba(85, 239, 196, 0.6); }
+            50% { transform: scale(1.03); box-shadow: 0 0 40px 15px rgba(85, 239, 196, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 30px 10px rgba(85, 239, 196, 0.6); }
+        }
+
+        /* Interactive elements */
+        .hover-lift {
+            transition: all 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
-<body class="kahoot-bg min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div id="particles-js"></div>
 
-    <div id="container" class="w-full max-w-5xl mx-auto text-center">
+    <div id="container" class="w-full max-w-5xl mx-auto text-center relative z-10">
 
         <!-- Pantalla de Inicio -->
-        <div id="start-screen">
-            <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-4 font-title">Aritmética - CUPREX</h1>
-            <h2 class="text-4xl md:text-6xl font-bold mb-8 font-title">Tema: MCM y MCD</h2>
-            
-            <!-- Gamification Profile -->
-            <div id="gamification-profile" class="bg-white/10 p-4 rounded-lg mb-6 max-w-md mx-auto">
-                <div class="flex items-center justify-between mb-2">
-                    <div id="profile-level" class="font-bold text-xl bg-yellow-500 text-black rounded-full w-12 h-12 flex items-center justify-center font-title">1</div>
-                    <div class="text-left flex-grow ml-4">
-                        <div id="profile-name" class="font-bold text-lg">Estudiante</div>
-                        <div id="profile-achievements" class="text-sm">Logros: 0/5</div>
-                    </div>
-                </div>
-                <div class="xp-bar-container w-full h-4">
-                    <div id="profile-xp-bar" class="xp-bar h-4" style="width: 0%;"></div>
-                </div>
-                <div id="profile-xp-text" class="text-sm mt-1 text-right">0/100 XP</div>
+        <div id="start-screen" class="animate-slide-up">
+            <div class="animate-float mb-8">
+                <h1 class="text-6xl md:text-8xl font-black tracking-tighter mb-4 font-title neon-glow">
+                    <i class="fas fa-calculator icon-bounce mr-4"></i>
+                    MCM & MCD Challenge
+                </h1>
+                <h2 class="text-3xl md:text-5xl font-bold gradient-text font-title">
+                    🎯 CUPREX - EXANI II
+                </h2>
             </div>
 
-            <div class="bg-white/20 p-6 rounded-lg mb-8 max-w-2xl mx-auto">
-                <h3 class="text-2xl font-bold mb-4 font-title">Configuración</h3>
-                <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
-                    <div>
-                        <label for="question-count" class="font-bold block mb-1">Nº de Preguntas:</label>
-                        <input type="number" id="question-count" value="10" min="1" max="25" class="w-24 text-center text-black font-bold p-2 rounded">
+            <!-- Gamification Profile -->
+            <div id="gamification-profile" class="glass modern-card hover-lift mb-8 max-w-md mx-auto animate-bounce-in">
+                <div class="flex items-center justify-between mb-4">
+                    <div id="profile-level" class="font-bold text-2xl bg-gradient-to-r from-yellow-400 to-orange-500 text-black rounded-full w-16 h-16 flex items-center justify-center font-title shadow-lg animate-glow">
+                        1
                     </div>
-                    <div>
-                        <label for="time-limit" class="font-bold block mb-1">Segundos/Pregunta:</label>
-                        <input type="number" id="time-limit" value="90" min="10" step="5" class="w-24 text-center text-black font-bold p-2 rounded">
+                    <div class="text-left flex-grow ml-4">
+                        <div id="profile-name" class="font-bold text-xl flex items-center">
+                            <i class="fas fa-user-graduate mr-2 text-blue-300"></i>
+                            Estudiante
+                        </div>
+                        <div id="profile-achievements" class="text-sm flex items-center text-yellow-300">
+                            <i class="fas fa-trophy mr-1"></i>
+                            Logros: 0/5
+                        </div>
                     </div>
-                    <div>
-                        <label for="question-order" class="font-bold block mb-1">Orden:</label>
-                        <select id="question-order" class="w-32 text-center text-black font-bold p-2 rounded">
-                            <option value="random">Aleatorio</option>
-                            <option value="sequential">En Orden</option>
+                </div>
+                <div class="xp-bar-container w-full h-6 mb-2">
+                    <div id="profile-xp-bar" class="xp-bar h-6" style="width: 0%;"></div>
+                </div>
+                <div id="profile-xp-text" class="text-sm text-right text-blue-200 font-semibold">
+                    <i class="fas fa-star mr-1"></i>
+                    0/100 XP
+                </div>
+            </div>
+
+            <div class="glass-strong modern-card hover-lift mb-8 max-w-2xl mx-auto animate-fade-left">
+                <h3 class="text-2xl font-bold mb-6 font-title flex items-center justify-center">
+                    <i class="fas fa-cogs mr-3 text-purple-300"></i>
+                    Configuración del Desafío
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="text-center">
+                        <label for="question-count" class="font-bold block mb-2 text-blue-200">
+                            <i class="fas fa-question-circle mr-2"></i>
+                            Nº de Preguntas:
+                        </label>
+                        <input type="number" id="question-count" value="10" min="1" max="25"
+                               class="w-24 text-center text-gray-800 font-bold p-3 rounded-xl border-2 border-blue-300 focus:border-blue-500 transition-all">
+                    </div>
+                    <div class="text-center">
+                        <label for="time-limit" class="font-bold block mb-2 text-green-200">
+                            <i class="fas fa-clock mr-2"></i>
+                            Segundos/Pregunta:
+                        </label>
+                        <input type="number" id="time-limit" value="90" min="10" step="5"
+                               class="w-24 text-center text-gray-800 font-bold p-3 rounded-xl border-2 border-green-300 focus:border-green-500 transition-all">
+                    </div>
+                    <div class="text-center">
+                        <label for="question-order" class="font-bold block mb-2 text-yellow-200">
+                            <i class="fas fa-shuffle mr-2"></i>
+                            Orden:
+                        </label>
+                        <select id="question-order"
+                                class="w-36 text-center text-gray-800 font-bold p-3 rounded-xl border-2 border-yellow-300 focus:border-yellow-500 transition-all">
+                            <option value="random">🎲 Aleatorio</option>
+                            <option value="sequential">📊 En Orden</option>
                         </select>
                     </div>
                 </div>
             </div>
 
-            <button id="start-button" class="bg-white text-gray-800 text-3xl font-bold py-4 px-12 rounded-lg shadow-2xl hover:bg-gray-200 transition-transform transform hover:scale-105 mb-8 font-title">
-                ¡Empezar!
+            <button id="start-button" class="btn-modern text-4xl font-bold py-6 px-16 mb-8 font-title animate-glow hover-lift">
+                <i class="fas fa-play mr-3"></i>
+                ¡Empezar Desafío!
             </button>
 
-            <div class="flex flex-wrap justify-center gap-4 mt-4">
-                <button id="study-guide-btn" class="bg-purple-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-purple-700">Guía de Estudio</button>
-                <button id="view-problems-btn" class="bg-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-blue-700">Ver Problemas</button>
-                <button id="view-solutions-btn" class="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700">Ver Soluciones</button>
-                <button id="view-references-btn" class="bg-yellow-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-yellow-700">Referencias</button>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6 max-w-4xl mx-auto">
+                <button id="study-guide-btn" class="glass modern-card hover-lift font-bold py-4 px-6 transition-all group">
+                    <i class="fas fa-graduation-cap text-2xl mb-2 text-purple-300 group-hover:scale-110 transition-transform"></i>
+                    <div class="font-title">Guía de Estudio</div>
+                    <div class="text-sm opacity-75">Aprende paso a paso</div>
+                </button>
+                <button id="view-problems-btn" class="glass modern-card hover-lift font-bold py-4 px-6 transition-all group">
+                    <i class="fas fa-list-alt text-2xl mb-2 text-blue-300 group-hover:scale-110 transition-transform"></i>
+                    <div class="font-title">Banco de Problemas</div>
+                    <div class="text-sm opacity-75">25 ejercicios</div>
+                </button>
+                <button id="view-solutions-btn" class="glass modern-card hover-lift font-bold py-4 px-6 transition-all group">
+                    <i class="fas fa-lightbulb text-2xl mb-2 text-green-300 group-hover:scale-110 transition-transform"></i>
+                    <div class="font-title">Soluciones</div>
+                    <div class="text-sm opacity-75">Respuestas detalladas</div>
+                </button>
+                <button id="view-references-btn" class="glass modern-card hover-lift font-bold py-4 px-6 transition-all group">
+                    <i class="fas fa-book text-2xl mb-2 text-yellow-300 group-hover:scale-110 transition-transform"></i>
+                    <div class="font-title">Referencias</div>
+                    <div class="text-sm opacity-75">Material de apoyo</div>
+                </button>
             </div>
         </div>
 
         <!-- Contenedor para material de estudio -->
-        <div id="study-material-container" class="hidden bg-white text-gray-800 rounded-lg p-8 text-left study-container">
+        <div id="study-material-container" class="hidden glass modern-card text-white p-8 text-left study-container">
             <div id="study-content"></div>
-            <button id="close-study-btn" class="mt-6 bg-red-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-700 w-full font-title">Cerrar</button>
+            <button id="close-study-btn" class="mt-6 btn-modern w-full font-title">
+                <i class="fas fa-times mr-2"></i>
+                Cerrar
+            </button>
         </div>
 
 
@@ -567,79 +938,801 @@
 
         function showStudyGuide() {
             let html = `
-                <h2 class="text-3xl font-bold mb-6 text-center font-title">Guía de Estudio: MCM y MCD</h2>
-                
-                <div class="bg-purple-50 p-6 rounded-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-3 text-purple-800 font-title">1. Conceptos Fundamentales</h3>
-                    <p class="mb-4">Para dominar el MCM y el MCD, primero debemos entender dos ideas clave: los **números primos** y la **descomposición factorial**.</p>
-                    <p>Un <strong>Número Primo</strong> es aquel que solo puede dividirse entre 1 y sí mismo (ej. 2, 3, 5, 7, 11...).</p>
-                    <p>La <strong>Descomposición Factorial</strong> es expresar un número como un producto de sus factores primos. Por ejemplo, el número 12 se descompone así:</p>
-                    <p class="text-center font-mono bg-gray-200 p-2 rounded my-2">
-                        12 | 2 <br>
-                         6 | 2 <br>
-                         3 | 3 <br>
-                         1 |
+                <div class="glass-strong modern-card text-white mb-8">
+                    <h2 class="text-4xl font-bold mb-6 text-center font-title neon-glow">
+                        <i class="fas fa-graduation-cap mr-3 text-blue-300"></i>
+                        Guía Completa: MCM y MCD
+                    </h2>
+                    <p class="text-xl text-center text-blue-200 font-semibold">
+                        🎯 Domina los conceptos para el EXANI-II de CUPREX
                     </p>
-                    <p>Esto significa que: \\( 12 = 2 \\times 2 \\times 3 = 2^2 \\times 3 \\)</p>
                 </div>
 
-                <div class="bg-blue-50 p-6 rounded-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-3 text-blue-800 font-title">2. Máximo Común Divisor (MCD)</h3>
-                    <p class="mb-2">Es el <strong>número más grande</strong> que puede dividir a dos o más números sin dejar residuo.</p>
-                    <p class="font-bold mb-2">Método de cálculo:</p>
-                    <ol class="list-decimal list-inside space-y-2">
-                        <li>Descompón cada número en sus factores primos.</li>
-                        <li>Identifica los factores primos <strong>comunes</strong> a todas las descomposiciones.</li>
-                        <li>Multiplica estos factores comunes, usando siempre el <strong>menor exponente</strong> con el que aparezcan.</li>
-                    </ol>
-                    <p class="mt-4"><strong>Ejemplo: MCD(36, 48)</strong></p>
-                    <p>\\( 36 = 2^2 \\times 3^2 \\)</p>
-                    <p>\\( 48 = 2^4 \\times 3^1 \\)</p>
-                    <p>Factores comunes: 2 y 3. Menores exponentes: \\(2^2\\) y \\(3^1\\).</p>
-                    <p class="font-bold text-lg">MCD = \\( 2^2 \\times 3^1 = 4 \\times 3 = 12 \\)</p>
-                </div>
-                
-                <div class="bg-green-50 p-6 rounded-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-3 text-green-800 font-title">3. Mínimo Común Múltiplo (MCM)</h3>
-                    <p class="mb-2">Es el <strong>número más pequeño</strong> que es múltiplo de dos o más números.</p>
-                    <p class="font-bold mb-2">Método de cálculo:</p>
-                     <ol class="list-decimal list-inside space-y-2">
-                        <li>Descompón cada número en sus factores primos.</li>
-                        <li>Selecciona <strong>todos</strong> los factores primos, tanto los comunes como los no comunes.</li>
-                        <li>Multiplica estos factores, usando siempre el <strong>mayor exponente</strong> con el que aparezcan.</li>
-                    </ol>
-                    <p class="mt-4"><strong>Ejemplo: MCM(36, 48)</strong></p>
-                    <p>\\( 36 = 2^2 \\times 3^2 \\)</p>
-                    <p>\\( 48 = 2^4 \\times 3^1 \\)</p>
-                    <p>Todos los factores: 2 y 3. Mayores exponentes: \\(2^4\\) y \\(3^2\\).</p>
-                    <p class="font-bold text-lg">MCM = \\( 2^4 \\times 3^2 = 16 \\times 9 = 144 \\)</p>
-                </div>
-                
-                <div class="bg-yellow-50 p-6 rounded-lg mb-6">
-                    <h3 class="text-2xl font-bold mb-3 text-yellow-800 font-title">4. Estrategia para EXANI-II</h3>
-                    <p class="mb-4">En el examen, la clave no es solo calcular, sino saber <strong>cuándo usar cada uno</strong>. ¡Identifica las palabras clave!</p>
-                    <table class="w-full text-center border">
-                        <thead><tr class="bg-gray-200"><th class="border p-2">Usa MCD si lees...</th><th class="border p-2">Usa MCM si lees...</th></tr></thead>
-                        <tbody>
-                            <tr><td class="border p-2">Dividir, repartir, cortar</td><td class="border p-2">Coincidir, encontrar, repetir</td></tr>
-                            <tr><td class="border p-2">El mayor tamaño posible</td><td class="border p-2">La próxima vez que...</td></tr>
-                            <tr><td class="border p-2">Máximo, más grande, más amplio</td><td class="border p-2">Mínimo, más pequeño, la primera vez</td></tr>
-                        </tbody>
-                    </table>
-                    <h4 class="font-bold mt-4">Tips Clave para el Examen:</h4>
-                     <ul class="list-disc list-inside mt-2 space-y-1">
-                        <li><strong>El MCD nunca es mayor</strong> que el número más pequeño del grupo.</li>
-                        <li><strong>El MCM nunca es menor</strong> que el número más grande del grupo.</li>
-                        <li><strong>Preguntas de 2 pasos:</strong> A veces te piden el número de trozos, no su tamaño (MCD). O la hora exacta, no los minutos (MCM). ¡Lee con atención!</li>
-                        <li><strong>Propiedad útil:</strong> Para dos números A y B: \\( A \\times B = MCD(A,B) \\times MCM(A,B) \\).</li>
-                    </ul>
+                <div class="space-y-8">
+                    <!-- Sección 1: Fundamentos -->
+                    <div class="glass modern-card hover-lift step-item">
+                        <h3 class="text-3xl font-bold mb-4 text-purple-300 font-title flex items-center">
+                            <i class="fas fa-cube mr-3"></i>
+                            1. Fundamentos Básicos
+                        </h3>
+                        <div class="space-y-4 text-lg">
+                            <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-4 rounded-xl border border-purple-300/30">
+                                <h4 class="font-bold text-xl mb-2 text-yellow-300">🔍 ¿Qué son los números primos?</h4>
+                                <p class="mb-3">Son números especiales que solo pueden dividirse exactamente entre <strong>1</strong> y <strong>ellos mismos</strong>.</p>
+                                <div class="bg-black/30 p-3 rounded-lg font-mono text-green-300">
+                                    Ejemplos: 2, 3, 5, 7, 11, 13, 17, 19, 23...
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-4 rounded-xl border border-blue-300/30">
+                                <h4 class="font-bold text-xl mb-2 text-yellow-300">⚡ Descomposición en factores primos</h4>
+                                <p class="mb-3">Es como "desarmar" un número en sus piezas más básicas (números primos).</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-black/30 p-3 rounded-lg">
+                                        <p class="text-center font-bold text-blue-300 mb-2">Ejemplo: Descomponer 24</p>
+                                        <div class="font-mono text-green-300 text-center">
+                                            24 │ 2<br>
+                                            12 │ 2<br>
+                                            6  │ 2<br>
+                                            3  │ 3<br>
+                                            1  │
+                                        </div>
+                                        <p class="text-center mt-2 font-bold">24 = 2³ × 3¹</p>
+                                    </div>
+                                    <div class="bg-black/30 p-3 rounded-lg">
+                                        <p class="text-center font-bold text-blue-300 mb-2">Ejemplo: Descomponer 30</p>
+                                        <div class="font-mono text-green-300 text-center">
+                                            30 │ 2<br>
+                                            15 │ 3<br>
+                                            5  │ 5<br>
+                                            1  │
+                                        </div>
+                                        <p class="text-center mt-2 font-bold">30 = 2¹ × 3¹ × 5¹</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección 2: MCD -->
+                    <div class="glass modern-card hover-lift step-item">
+                        <h3 class="text-3xl font-bold mb-4 text-green-300 font-title flex items-center">
+                            <i class="fas fa-divide mr-3"></i>
+                            2. Máximo Común Divisor (MCD)
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-r from-green-500/20 to-emerald-500/20 p-4 rounded-xl border border-green-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">🎯 ¿Qué es el MCD?</h4>
+                                <p class="text-lg mb-3">Es el <strong>número más grande</strong> que puede dividir exactamente a dos o más números.</p>
+                                <div class="bg-black/30 p-3 rounded-lg">
+                                    <p class="text-center font-bold text-blue-300">💡 Piénsalo así:</p>
+                                    <p class="text-center">"¿Cuál es el trozo MÁS GRANDE en que puedo dividir estos números?"</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-4 rounded-xl border border-cyan-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">📝 Método para calcular MCD:</h4>
+                                <ol class="list-decimal list-inside space-y-2 text-lg">
+                                    <li>Descompón cada número en factores primos</li>
+                                    <li>Identifica los factores <strong>comunes</strong> a todos</li>
+                                    <li>Toma el <strong>menor exponente</strong> de cada factor común</li>
+                                    <li>Multiplica estos factores</li>
+                                </ol>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-purple-500/20 to-pink-500/20 p-4 rounded-xl border border-purple-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">🔥 Cuándo usar MCD - Palabras Clave:</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-black/30 p-3 rounded-lg">
+                                        <h5 class="font-bold text-red-300 mb-2">Verbos de acción:</h5>
+                                        <ul class="text-green-300">
+                                            <li>• Dividir, cortar, repartir</li>
+                                            <li>• Separar, partir, fraccionar</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-black/30 p-3 rounded-lg">
+                                        <h5 class="font-bold text-red-300 mb-2">Palabras descriptivas:</h5>
+                                        <ul class="text-green-300">
+                                            <li>• Mayor/máximo tamaño</li>
+                                            <li>• Lo más grande posible</li>
+                                            <li>• Grupos iguales</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección 3: MCM -->
+                    <div class="glass modern-card hover-lift step-item">
+                        <h3 class="text-3xl font-bold mb-4 text-blue-300 font-title flex items-center">
+                            <i class="fas fa-arrows-repeat mr-3"></i>
+                            3. Mínimo Común Múltiplo (MCM)
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 p-4 rounded-xl border border-blue-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">🎯 ¿Qué es el MCM?</h4>
+                                <p class="text-lg mb-3">Es el <strong>número más pequeño</strong> que es múltiplo de dos o más números.</p>
+                                <div class="bg-black/30 p-3 rounded-lg">
+                                    <p class="text-center font-bold text-blue-300">💡 Piénsalo así:</p>
+                                    <p class="text-center">"¿Cuándo volverán a COINCIDIR estos eventos?"</p>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-pink-500/20 to-red-500/20 p-4 rounded-xl border border-pink-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">📝 Método para calcular MCM:</h4>
+                                <ol class="list-decimal list-inside space-y-2 text-lg">
+                                    <li>Descompón cada número en factores primos</li>
+                                    <li>Toma <strong>todos</strong> los factores (comunes y no comunes)</li>
+                                    <li>Usa el <strong>mayor exponente</strong> de cada factor</li>
+                                    <li>Multiplica estos factores</li>
+                                </ol>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-orange-500/20 to-yellow-500/20 p-4 rounded-xl border border-orange-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">🔥 Cuándo usar MCM - Palabras Clave:</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-black/30 p-3 rounded-lg">
+                                        <h5 class="font-bold text-red-300 mb-2">Conceptos de tiempo:</h5>
+                                        <ul class="text-green-300">
+                                            <li>• Coincidir, encontrarse</li>
+                                            <li>• La próxima vez que...</li>
+                                            <li>• Volver a repetirse</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-black/30 p-3 rounded-lg">
+                                        <h5 class="font-bold text-red-300 mb-2">Conceptos de tamaño:</h5>
+                                        <ul class="text-green-300">
+                                            <li>• Menor/mínimo número</li>
+                                            <li>• La primera vez</li>
+                                            <li>• El más pequeño</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sección 4: Estrategias -->
+                    <div class="glass modern-card hover-lift step-item">
+                        <h3 class="text-3xl font-bold mb-4 text-yellow-300 font-title flex items-center">
+                            <i class="fas fa-lightbulb mr-3"></i>
+                            4. Estrategias para el EXANI-II
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 p-4 rounded-xl border border-yellow-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">🎯 Reglas de Oro:</h4>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-black/30 p-3 rounded-lg border border-green-300/30">
+                                        <h5 class="font-bold text-green-300 mb-2">✅ Para MCD:</h5>
+                                        <ul class="text-white space-y-1">
+                                            <li>• Nunca es mayor que el número más pequeño</li>
+                                            <li>• Se usa para "dividir" o "repartir"</li>
+                                            <li>• Busca el tamaño máximo de grupos</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-black/30 p-3 rounded-lg border border-blue-300/30">
+                                        <h5 class="font-bold text-blue-300 mb-2">✅ Para MCM:</h5>
+                                        <ul class="text-white space-y-1">
+                                            <li>• Nunca es menor que el número más grande</li>
+                                            <li>• Se usa para "coincidir" o "repetir"</li>
+                                            <li>• Busca cuándo se encuentran</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-red-500/20 to-pink-500/20 p-4 rounded-xl border border-red-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">⚠️ Trampas Comunes:</h4>
+                                <ul class="space-y-2 text-lg">
+                                    <li class="flex items-start">
+                                        <span class="text-red-400 mr-2">1.</span>
+                                        <span><strong>Preguntas de 2 pasos:</strong> A veces te piden el número de grupos, no el tamaño del grupo</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-400 mr-2">2.</span>
+                                        <span><strong>Confundir tiempo:</strong> Te piden la hora exacta, no solo los minutos</span>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-red-400 mr-2">3.</span>
+                                        <span><strong>Números primos:</strong> Si dos números son primos entre sí, MCD = 1 y MCM = su producto</span>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-xl border border-green-300/30">
+                                <h4 class="font-bold text-xl text-yellow-300 mb-3">🔥 Fórmula Mágica:</h4>
+                                <div class="bg-black/30 p-4 rounded-lg text-center">
+                                    <p class="text-2xl font-bold text-blue-300 mb-2">A × B = MCD(A,B) × MCM(A,B)</p>
+                                    <p class="text-sm text-gray-300">Esta fórmula te puede salvar en el examen</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón para ejercicios -->
+                    <div class="text-center">
+                        <button id="show-exercises-btn" class="btn-modern text-2xl font-bold py-4 px-8 animate-glow">
+                            <i class="fas fa-dumbbell mr-3"></i>
+                            Ver Ejercicios Paso a Paso
+                        </button>
+                    </div>
                 </div>
             `;
             studyContent.innerHTML = html;
             startScreen.classList.add('hidden');
             studyMaterialContainer.classList.remove('hidden');
+
+            // Add animation reveal effect
+            setTimeout(() => {
+                const stepItems = document.querySelectorAll('.step-item');
+                stepItems.forEach((item, index) => {
+                    setTimeout(() => {
+                        item.classList.add('revealed');
+                    }, index * 200);
+                });
+            }, 100);
+
+            // Add exercise button event
+            document.getElementById('show-exercises-btn').addEventListener('click', showExercises);
+
             // Re-render MathJax content
-            MathJax.typeset();
+            if (typeof MathJax !== 'undefined') MathJax.typeset();
+        }
+
+        function showExercises() {
+            let html = `
+                <div class="glass-strong modern-card text-white mb-8">
+                    <h2 class="text-4xl font-bold mb-6 text-center font-title neon-glow">
+                        <i class="fas fa-dumbbell mr-3 text-orange-300"></i>
+                        5 Ejercicios Paso a Paso
+                    </h2>
+                    <p class="text-xl text-center text-blue-200 font-semibold">
+                        🎯 Domina la técnica con ejemplos reales del EXANI-II
+                    </p>
+                    <div class="text-center mt-4">
+                        <button id="back-to-guide-btn" class="glass modern-card px-6 py-2 hover-lift">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            Volver a la Guía
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-12">
+                    <!-- Ejercicio 1: MCD Básico -->
+                    <div class="glass modern-card hover-lift exercise-card">
+                        <h3 class="text-3xl font-bold mb-6 text-green-300 font-title flex items-center">
+                            <span class="bg-gradient-to-r from-green-400 to-blue-500 text-black rounded-full w-12 h-12 flex items-center justify-center mr-4 text-2xl font-black">1</span>
+                            MCD - Problema de División
+                        </h3>
+
+                        <div class="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 p-6 rounded-xl border border-yellow-300/30 mb-6">
+                            <h4 class="text-2xl font-bold text-yellow-300 mb-4 flex items-center">
+                                <i class="fas fa-question-circle mr-3"></i>
+                                Problema:
+                            </h4>
+                            <p class="text-xl leading-relaxed">
+                                Un carpintero quiere cortar dos listones de madera de <strong>48 cm</strong> y <strong>72 cm</strong>
+                                en trozos de igual longitud, <strong>lo más largos posible</strong>. ¿Cuál debe ser la longitud de cada trozo?
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-blue-300 mb-4 flex items-center step-title" data-step="1">
+                                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                    Identificar qué operación usar
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-blue-300/30" data-step="1" style="display: none;">
+                                    <p class="mb-3"><strong>Palabras clave:</strong> "cortar", "lo más largos posible"</p>
+                                    <p class="mb-3">🎯 <strong>Necesitamos MCD</strong> porque queremos dividir en trozos del mayor tamaño posible.</p>
+                                    <div class="bg-green-500/20 p-3 rounded-lg">
+                                        <p class="font-bold">✅ Regla: MCD se usa para DIVIDIR en partes lo MÁS GRANDES posible</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-blue-300 mb-4 flex items-center step-title" data-step="2">
+                                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                    Descomponer en factores primos
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-blue-300/30" data-step="2" style="display: none;">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="bg-purple-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-purple-300">Descomponer 48</h6>
+                                            <div class="font-mono text-green-300 text-center text-lg leading-relaxed">
+                                                48 │ 2<br>
+                                                24 │ 2<br>
+                                                12 │ 2<br>
+                                                6  │ 2<br>
+                                                3  │ 3<br>
+                                                1  │
+                                            </div>
+                                            <p class="text-center mt-3 font-bold text-xl">48 = 2⁴ × 3¹</p>
+                                        </div>
+                                        <div class="bg-indigo-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-indigo-300">Descomponer 72</h6>
+                                            <div class="font-mono text-green-300 text-center text-lg leading-relaxed">
+                                                72 │ 2<br>
+                                                36 │ 2<br>
+                                                18 │ 2<br>
+                                                9  │ 3<br>
+                                                3  │ 3<br>
+                                                1  │
+                                            </div>
+                                            <p class="text-center mt-3 font-bold text-xl">72 = 2³ × 3²</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-blue-300 mb-4 flex items-center step-title" data-step="3">
+                                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
+                                    Aplicar regla del MCD
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-blue-300/30" data-step="3" style="display: none;">
+                                    <div class="space-y-4">
+                                        <p class="text-lg">Para MCD: <strong>factores comunes con menor exponente</strong></p>
+                                        <div class="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-4 rounded-lg">
+                                            <p class="mb-2">48 = <span class="text-yellow-300">2⁴</span> × <span class="text-green-300">3¹</span></p>
+                                            <p class="mb-4">72 = <span class="text-yellow-300">2³</span> × <span class="text-green-300">3²</span></p>
+                                            <p class="font-bold text-red-300">Factores comunes: 2 y 3</p>
+                                            <p class="font-bold text-yellow-300">Menores exponentes: 2³ y 3¹</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-blue-300 mb-4 flex items-center step-title" data-step="4">
+                                    <span class="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">4</span>
+                                    Calcular el resultado
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-blue-300/30" data-step="4" style="display: none;">
+                                    <div class="text-center">
+                                        <div class="bg-gradient-to-r from-green-500/30 to-emerald-500/30 p-6 rounded-xl border border-green-300/50">
+                                            <p class="text-2xl mb-4">MCD(48, 72) = 2³ × 3¹</p>
+                                            <p class="text-2xl mb-4">= 8 × 3</p>
+                                            <p class="text-4xl font-bold text-green-300">= 24 cm</p>
+                                        </div>
+                                        <div class="mt-4 bg-blue-500/20 p-4 rounded-lg">
+                                            <p class="font-bold text-yellow-300">✅ Respuesta: Cada trozo debe medir 24 cm</p>
+                                            <p class="text-sm text-gray-300">Verificación: 48÷24=2 trozos, 72÷24=3 trozos</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-6">
+                                <button class="btn-modern text-lg py-3 px-8 exercise-btn" data-exercise="1">
+                                    <i class="fas fa-play mr-2"></i>
+                                    Mostrar Solución Paso a Paso
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 2: MCM Básico -->
+                    <div class="glass modern-card hover-lift exercise-card">
+                        <h3 class="text-3xl font-bold mb-6 text-blue-300 font-title flex items-center">
+                            <span class="bg-gradient-to-r from-blue-400 to-purple-500 text-black rounded-full w-12 h-12 flex items-center justify-center mr-4 text-2xl font-black">2</span>
+                            MCM - Problema de Coincidencia
+                        </h3>
+
+                        <div class="bg-gradient-to-r from-blue-500/20 to-purple-500/20 p-6 rounded-xl border border-blue-300/30 mb-6">
+                            <h4 class="text-2xl font-bold text-blue-300 mb-4 flex items-center">
+                                <i class="fas fa-clock mr-3"></i>
+                                Problema:
+                            </h4>
+                            <p class="text-xl leading-relaxed">
+                                Dos autobuses salen de la terminal. Uno regresa cada <strong>15 minutos</strong> y
+                                otro cada <strong>20 minutos</strong>. Si salieron juntos a las 8:00 AM,
+                                ¿a qué hora volverán a <strong>coincidir</strong> en la terminal?
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-purple-300 mb-4 flex items-center step-title" data-step="5">
+                                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                    Identificar qué operación usar
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-purple-300/30" data-step="5" style="display: none;">
+                                    <p class="mb-3"><strong>Palabras clave:</strong> "coincidir", "volverán a"</p>
+                                    <p class="mb-3">🎯 <strong>Necesitamos MCM</strong> porque buscamos cuándo se encuentran de nuevo.</p>
+                                    <div class="bg-blue-500/20 p-3 rounded-lg">
+                                        <p class="font-bold">✅ Regla: MCM se usa para encontrar COINCIDENCIAS en el tiempo</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-purple-300 mb-4 flex items-center step-title" data-step="6">
+                                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                    Descomponer en factores primos
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-purple-300/30" data-step="6" style="display: none;">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="bg-green-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-green-300">Descomponer 15</h6>
+                                            <div class="font-mono text-green-300 text-center text-lg leading-relaxed">
+                                                15 │ 3<br>
+                                                5  │ 5<br>
+                                                1  │
+                                            </div>
+                                            <p class="text-center mt-3 font-bold text-xl">15 = 3¹ × 5¹</p>
+                                        </div>
+                                        <div class="bg-orange-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-orange-300">Descomponer 20</h6>
+                                            <div class="font-mono text-green-300 text-center text-lg leading-relaxed">
+                                                20 │ 2<br>
+                                                10 │ 2<br>
+                                                5  │ 5<br>
+                                                1  │
+                                            </div>
+                                            <p class="text-center mt-3 font-bold text-xl">20 = 2² × 5¹</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-purple-300 mb-4 flex items-center step-title" data-step="7">
+                                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
+                                    Aplicar regla del MCM
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-purple-300/30" data-step="7" style="display: none;">
+                                    <div class="space-y-4">
+                                        <p class="text-lg">Para MCM: <strong>todos los factores con mayor exponente</strong></p>
+                                        <div class="bg-gradient-to-r from-pink-500/20 to-red-500/20 p-4 rounded-lg">
+                                            <p class="mb-2">15 = <span class="text-yellow-300">3¹</span> × <span class="text-green-300">5¹</span></p>
+                                            <p class="mb-4">20 = <span class="text-blue-300">2²</span> × <span class="text-green-300">5¹</span></p>
+                                            <p class="font-bold text-red-300">Todos los factores: 2, 3, 5</p>
+                                            <p class="font-bold text-yellow-300">Mayores exponentes: 2², 3¹, 5¹</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-purple-300 mb-4 flex items-center step-title" data-step="8">
+                                    <span class="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">4</span>
+                                    Calcular y convertir a tiempo
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-purple-300/30" data-step="8" style="display: none;">
+                                    <div class="text-center space-y-4">
+                                        <div class="bg-gradient-to-r from-blue-500/30 to-purple-500/30 p-6 rounded-xl border border-blue-300/50">
+                                            <p class="text-2xl mb-4">MCM(15, 20) = 2² × 3¹ × 5¹</p>
+                                            <p class="text-2xl mb-4">= 4 × 3 × 5</p>
+                                            <p class="text-4xl font-bold text-blue-300">= 60 minutos</p>
+                                        </div>
+                                        <div class="bg-green-500/20 p-4 rounded-lg">
+                                            <p class="font-bold text-yellow-300">✅ Coincidirán cada 60 minutos (1 hora)</p>
+                                            <p class="text-2xl font-bold text-green-300">Respuesta: 9:00 AM</p>
+                                            <p class="text-sm text-gray-300">8:00 AM + 1 hora = 9:00 AM</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-6">
+                                <button class="btn-modern text-lg py-3 px-8 exercise-btn" data-exercise="2">
+                                    <i class="fas fa-play mr-2"></i>
+                                    Mostrar Solución Paso a Paso
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 3: Problema Mixto -->
+                    <div class="glass modern-card hover-lift exercise-card">
+                        <h3 class="text-3xl font-bold mb-6 text-orange-300 font-title flex items-center">
+                            <span class="bg-gradient-to-r from-orange-400 to-red-500 text-black rounded-full w-12 h-12 flex items-center justify-center mr-4 text-2xl font-black">3</span>
+                            Problema de 2 Pasos - MCD + Cálculo
+                        </h3>
+
+                        <div class="bg-gradient-to-r from-orange-500/20 to-red-500/20 p-6 rounded-xl border border-orange-300/30 mb-6">
+                            <h4 class="text-2xl font-bold text-orange-300 mb-4 flex items-center">
+                                <i class="fas fa-boxes mr-3"></i>
+                                Problema:
+                            </h4>
+                            <p class="text-xl leading-relaxed">
+                                Se tienen <strong>48 bolígrafos</strong> y <strong>64 lápices</strong>. Se quieren armar estuches
+                                con la misma cantidad de cada artículo, usando la <strong>mayor cantidad de estuches posible</strong>.
+                                ¿Cuántos <strong>lápices habrá en cada estuche</strong>?
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-orange-300 mb-4 flex items-center step-title" data-step="9">
+                                    <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                    Identificar qué necesitamos
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-orange-300/30" data-step="9" style="display: none;">
+                                    <div class="space-y-3">
+                                        <p class="mb-3"><strong>Palabras clave:</strong> "mayor cantidad de estuches posible"</p>
+                                        <p class="mb-3">🎯 <strong>Paso 1:</strong> MCD para encontrar el número de estuches</p>
+                                        <p class="mb-3">🎯 <strong>Paso 2:</strong> Dividir lápices entre número de estuches</p>
+                                        <div class="bg-red-500/20 p-3 rounded-lg">
+                                            <p class="font-bold">⚠️ ¡Cuidado! No pide el MCD directamente, sino los lápices por estuche</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-orange-300 mb-4 flex items-center step-title" data-step="10">
+                                    <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                    Calcular MCD(48, 64)
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-orange-300/30" data-step="10" style="display: none;">
+                                    <div class="grid md:grid-cols-2 gap-6">
+                                        <div class="bg-blue-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-blue-300">48 = 2⁴ × 3¹</h6>
+                                        </div>
+                                        <div class="bg-purple-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-purple-300">64 = 2⁶</h6>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg text-center">
+                                        <p class="text-xl mb-2">Factor común: 2</p>
+                                        <p class="text-xl mb-2">Menor exponente: 2⁴</p>
+                                        <p class="text-2xl font-bold text-green-300">MCD = 2⁴ = 16 estuches</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-orange-300 mb-4 flex items-center step-title" data-step="11">
+                                    <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
+                                    Calcular lápices por estuche
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-orange-300/30" data-step="11" style="display: none;">
+                                    <div class="text-center">
+                                        <div class="bg-gradient-to-r from-purple-500/30 to-pink-500/30 p-6 rounded-xl border border-purple-300/50">
+                                            <p class="text-2xl mb-4">Lápices por estuche = Total de lápices ÷ Número de estuches</p>
+                                            <p class="text-2xl mb-4">= 64 ÷ 16</p>
+                                            <p class="text-4xl font-bold text-purple-300">= 4 lápices por estuche</p>
+                                        </div>
+                                        <div class="mt-4 bg-green-500/20 p-4 rounded-lg">
+                                            <p class="font-bold text-yellow-300">✅ Respuesta: 4 lápices en cada estuche</p>
+                                            <p class="text-sm text-gray-300">Verificación: 16 estuches × 4 lápices = 64 lápices ✓</p>
+                                            <p class="text-sm text-gray-300">También: 16 estuches × 3 bolígrafos = 48 bolígrafos ✓</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-6">
+                                <button class="btn-modern text-lg py-3 px-8 exercise-btn" data-exercise="3">
+                                    <i class="fas fa-play mr-2"></i>
+                                    Mostrar Solución Paso a Paso
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 4: Números primos entre sí -->
+                    <div class="glass modern-card hover-lift exercise-card">
+                        <h3 class="text-3xl font-bold mb-6 text-pink-300 font-title flex items-center">
+                            <span class="bg-gradient-to-r from-pink-400 to-purple-500 text-black rounded-full w-12 h-12 flex items-center justify-center mr-4 text-2xl font-black">4</span>
+                            Números Primos Entre Sí
+                        </h3>
+
+                        <div class="bg-gradient-to-r from-pink-500/20 to-purple-500/20 p-6 rounded-xl border border-pink-300/30 mb-6">
+                            <h4 class="text-2xl font-bold text-pink-300 mb-4 flex items-center">
+                                <i class="fas fa-star mr-3"></i>
+                                Problema:
+                            </h4>
+                            <p class="text-xl leading-relaxed">
+                                ¿Cuál es el MCM de dos números primos diferentes, como <strong>7 y 13</strong>?
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="12">
+                                    <span class="bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                    Reconocer números primos entre sí
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="12" style="display: none;">
+                                    <div class="space-y-4">
+                                        <p class="text-lg">Dos números son <strong>primos entre sí</strong> cuando su único divisor común es 1.</p>
+                                        <div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-4 rounded-lg">
+                                            <p class="mb-2"><strong>7:</strong> Es primo (solo divisible entre 1 y 7)</p>
+                                            <p class="mb-2"><strong>13:</strong> Es primo (solo divisible entre 1 y 13)</p>
+                                            <p class="font-bold text-cyan-300">🔍 No comparten factores excepto el 1</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="13">
+                                    <span class="bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                    Aplicar regla especial
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="13" style="display: none;">
+                                    <div class="space-y-4">
+                                        <div class="bg-gradient-to-r from-yellow-500/30 to-orange-500/30 p-6 rounded-xl border border-yellow-300/50 text-center">
+                                            <h6 class="text-xl font-bold text-yellow-300 mb-4">🔥 Regla de Oro para Números Primos</h6>
+                                            <p class="text-lg mb-4">Si dos números son primos entre sí:</p>
+                                            <div class="space-y-2">
+                                                <p class="text-xl"><strong>MCD = 1</strong></p>
+                                                <p class="text-xl"><strong>MCM = A × B</strong></p>
+                                            </div>
+                                        </div>
+                                        <div class="bg-green-500/20 p-4 rounded-lg text-center">
+                                            <p class="text-2xl font-bold text-green-300">MCM(7, 13) = 7 × 13 = 91</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-6">
+                                <button class="btn-modern text-lg py-3 px-8 exercise-btn" data-exercise="4">
+                                    <i class="fas fa-play mr-2"></i>
+                                    Mostrar Solución Paso a Paso
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ejercicio 5: Fórmula mágica -->
+                    <div class="glass modern-card hover-lift exercise-card">
+                        <h3 class="text-3xl font-bold mb-6 text-cyan-300 font-title flex items-center">
+                            <span class="bg-gradient-to-r from-cyan-400 to-blue-500 text-black rounded-full w-12 h-12 flex items-center justify-center mr-4 text-2xl font-black">5</span>
+                            Usando la Fórmula Mágica
+                        </h3>
+
+                        <div class="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 p-6 rounded-xl border border-cyan-300/30 mb-6">
+                            <h4 class="text-2xl font-bold text-cyan-300 mb-4 flex items-center">
+                                <i class="fas fa-magic mr-3"></i>
+                                Problema:
+                            </h4>
+                            <p class="text-xl leading-relaxed">
+                                El MCM de dos números es <strong>60</strong> y su MCD es <strong>4</strong>.
+                                Si uno de los números es <strong>12</strong>, ¿cuál es el otro número?
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="14">
+                                    <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
+                                    Recordar la fórmula mágica
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="14" style="display: none;">
+                                    <div class="text-center">
+                                        <div class="bg-gradient-to-r from-purple-500/30 to-pink-500/30 p-6 rounded-xl border border-purple-300/50">
+                                            <h6 class="text-2xl font-bold text-purple-300 mb-4">🔮 Fórmula Mágica</h6>
+                                            <p class="text-3xl font-bold text-yellow-300">A × B = MCD(A,B) × MCM(A,B)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="15">
+                                    <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
+                                    Sustituir valores conocidos
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="15" style="display: none;">
+                                    <div class="space-y-4">
+                                        <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg">
+                                            <p class="text-lg mb-2"><strong>Datos conocidos:</strong></p>
+                                            <p>• A = 12 (uno de los números)</p>
+                                            <p>• B = ? (el otro número)</p>
+                                            <p>• MCD = 4</p>
+                                            <p>• MCM = 60</p>
+                                        </div>
+                                        <div class="bg-blue-500/20 p-4 rounded-lg text-center">
+                                            <p class="text-xl">Sustituyendo en la fórmula:</p>
+                                            <p class="text-2xl font-bold text-blue-300">12 × B = 4 × 60</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="16">
+                                    <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
+                                    Resolver la ecuación
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="16" style="display: none;">
+                                    <div class="text-center">
+                                        <div class="bg-gradient-to-r from-orange-500/30 to-red-500/30 p-6 rounded-xl border border-orange-300/50">
+                                            <p class="text-2xl mb-4">12 × B = 4 × 60</p>
+                                            <p class="text-2xl mb-4">12 × B = 240</p>
+                                            <p class="text-2xl mb-4">B = 240 ÷ 12</p>
+                                            <p class="text-4xl font-bold text-orange-300">B = 20</p>
+                                        </div>
+                                        <div class="mt-4 bg-green-500/20 p-4 rounded-lg">
+                                            <p class="font-bold text-yellow-300">✅ El otro número es 20</p>
+                                            <p class="text-sm text-gray-300">Verificación: 12 × 20 = 240, y 4 × 60 = 240 ✓</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-6">
+                                <button class="btn-modern text-lg py-3 px-8 exercise-btn" data-exercise="5">
+                                    <i class="fas fa-play mr-2"></i>
+                                    Mostrar Solución Paso a Paso
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center mt-12">
+                    <div class="glass modern-card p-6">
+                        <h4 class="text-2xl font-bold text-yellow-300 mb-4">
+                            <i class="fas fa-trophy mr-3"></i>
+                            ¡Felicitaciones!
+                        </h4>
+                        <p class="text-lg text-blue-200">
+                            Has completado los 5 ejercicios fundamentales. Ahora estás listo para el EXANI-II.
+                        </p>
+                        <button id="practice-quiz-btn" class="btn-modern text-xl py-3 px-8 mt-4">
+                            <i class="fas fa-gamepad mr-2"></i>
+                            ¡Practicar con el Quiz!
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            studyContent.innerHTML = html;
+
+            // Add event listeners for exercise buttons
+            document.querySelectorAll('.exercise-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const exerciseNum = this.getAttribute('data-exercise');
+                    showExerciseSteps(exerciseNum);
+                });
+            });
+
+            // Back to guide button
+            document.getElementById('back-to-guide-btn').addEventListener('click', showStudyGuide);
+
+            // Practice quiz button
+            document.getElementById('practice-quiz-btn').addEventListener('click', () => {
+                closeStudyMaterial();
+                startGame();
+            });
+
+            // Re-render MathJax content
+            if (typeof MathJax !== 'undefined') MathJax.typeset();
+        }
+
+        function showExerciseSteps(exerciseNum) {
+            const startStep = (exerciseNum - 1) * 4 + 1;
+            const endStep = exerciseNum * 4;
+
+            // Hide button
+            const btn = document.querySelector(`[data-exercise="${exerciseNum}"]`);
+            btn.style.display = 'none';
+
+            // Show steps with animation
+            for (let i = startStep; i <= endStep; i++) {
+                setTimeout(() => {
+                    const stepContent = document.querySelector(`[data-step="${i}"]`);
+                    if (stepContent) {
+                        stepContent.style.display = 'block';
+                        stepContent.style.opacity = '0';
+                        stepContent.style.transform = 'translateY(20px)';
+
+                        setTimeout(() => {
+                            stepContent.style.transition = 'all 0.6s ease';
+                            stepContent.style.opacity = '1';
+                            stepContent.style.transform = 'translateY(0)';
+                        }, 50);
+                    }
+                }, (i - startStep) * 800);
+            }
         }
 
         function closeStudyMaterial() {
@@ -647,9 +1740,56 @@
             startScreen.classList.remove('hidden');
         }
 
+        // Particles.js configuration
+        function initParticles() {
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 50, density: { enable: true, value_area: 800 } },
+                    color: { value: '#ffffff' },
+                    shape: { type: 'circle' },
+                    opacity: { value: 0.1, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: '#ffffff',
+                        opacity: 0.1,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: 'none',
+                        random: false,
+                        straight: false,
+                        out_mode: 'out',
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: 'canvas',
+                    events: {
+                        onhover: { enable: true, mode: 'grab' },
+                        onclick: { enable: true, mode: 'push' },
+                        resize: true
+                    },
+                    modes: {
+                        grab: { distance: 140, line_linked: { opacity: 0.3 } },
+                        push: { particles_nb: 4 }
+                    }
+                },
+                retina_detect: true
+            });
+        }
+
+        // Initialize particles when page loads
+        if (typeof particlesJS !== 'undefined') {
+            initParticles();
+        }
+
         // Initial setup
         updateProfileUI();
-        
+
         // Event Listeners
         startButton.addEventListener('click', startGame);
         restartButton.addEventListener('click', () => {

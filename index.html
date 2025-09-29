@@ -16,6 +16,11 @@
     <link rel="stylesheet" href="src/css/styles.css">
     <link rel="stylesheet" href="src/css/animations.css">
 
+    <!-- Modular JavaScript Files -->
+    <script src="src/js/modules/math-utils.js"></script>
+    <script src="src/js/modules/quiz-manager.js"></script>
+    <script src="src/js/data/questions.js"></script>
+
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -559,19 +564,7 @@
         </div>
     </div>
 
-    <script type="module">
-        // Import modular JavaScript files
-        import('./src/js/modules/math-utils.js')
-            .then(module => { window.MathUtils = module.default || module; })
-            .catch(err => console.error('Failed to load math-utils.js:', err));
-
-        import('./src/js/modules/quiz-manager.js')
-            .then(module => { window.QuizManager = module.default || module; })
-            .catch(err => console.error('Failed to load quiz-manager.js:', err));
-
-        import('./src/js/data/questions.js')
-            .then(module => { window.QuestionDatabase = module.default || module; })
-            .catch(err => console.error('Failed to load questions.js:', err));
+    <script>
 
         const allQuestions = [
             // (25 questions from previous context, redacted for brevity)
@@ -613,9 +606,8 @@
             "Confía en tu proceso de aprendizaje."
         ];
 
-        // Initialize QuizManager instance (will be available after module loads)
+        // Initialize QuizManager instance (modules loaded via <script> tags)
         let quizManager = null;
-        let modulesLoaded = false;
 
         // Function to initialize QuizManager
         function initializeQuizManager() {
@@ -623,20 +615,34 @@
                 try {
                     quizManager = new window.QuizManager();
                     setupQuizCallbacks();
-                    modulesLoaded = true;
                     console.log('✅ QuizManager initialized successfully');
+                    console.log('📊 Available modules:', {
+                        MathUtils: !!window.MathUtils,
+                        QuizManager: !!window.QuizManager,
+                        QuestionDatabase: !!window.QuestionDatabase
+                    });
+                    return true;
                 } catch (error) {
                     console.error('❌ Error initializing QuizManager:', error);
+                    return false;
                 }
-            } else if (!window.QuizManager) {
-                console.warn('⚠️ QuizManager class not available yet');
             }
+            return false;
         }
 
-        // Try to initialize multiple times with increasing delays
-        setTimeout(initializeQuizManager, 100);
-        setTimeout(initializeQuizManager, 500);
-        setTimeout(initializeQuizManager, 1000);
+        // Initialize when DOM is ready (modules should be loaded by now)
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🎯 DOM loaded, attempting QuizManager initialization...');
+            initializeQuizManager();
+        });
+
+        // Fallback: Also try after a short delay
+        setTimeout(() => {
+            if (!quizManager) {
+                console.log('🔄 Fallback initialization attempt...');
+                initializeQuizManager();
+            }
+        }, 500);
 
         // Gamification variables
         const userProfile = {
@@ -755,12 +761,17 @@
 
             if (!quizManager) {
                 console.error('❌ QuizManager not initialized yet');
+                console.log('🔍 Checking available modules:');
+                console.log('  window.MathUtils:', !!window.MathUtils);
+                console.log('  window.QuizManager:', !!window.QuizManager);
+                console.log('  window.QuestionDatabase:', !!window.QuestionDatabase);
 
                 // Try to initialize one more time
-                initializeQuizManager();
+                const initialized = initializeQuizManager();
 
-                if (!quizManager) {
-                    alert('⚠️ El sistema no está listo aún. Por favor, espera unos segundos y vuelve a intentar.');
+                if (!initialized) {
+                    console.error('❌ Failed to initialize QuizManager');
+                    alert('⚠️ Error: No se pudieron cargar los módulos del juego. Por favor, recarga la página.');
                     return;
                 }
             }

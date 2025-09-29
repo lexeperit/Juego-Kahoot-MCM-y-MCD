@@ -615,15 +615,28 @@
 
         // Initialize QuizManager instance (will be available after module loads)
         let quizManager = null;
+        let modulesLoaded = false;
 
-        // Initialize QuizManager when modules are loaded
-        setTimeout(() => {
-            if (window.QuizManager) {
-                quizManager = new window.QuizManager();
-                setupQuizCallbacks();
-                console.log('✅ QuizManager initialized successfully');
+        // Function to initialize QuizManager
+        function initializeQuizManager() {
+            if (window.QuizManager && !quizManager) {
+                try {
+                    quizManager = new window.QuizManager();
+                    setupQuizCallbacks();
+                    modulesLoaded = true;
+                    console.log('✅ QuizManager initialized successfully');
+                } catch (error) {
+                    console.error('❌ Error initializing QuizManager:', error);
+                }
+            } else if (!window.QuizManager) {
+                console.warn('⚠️ QuizManager class not available yet');
             }
-        }, 100);
+        }
+
+        // Try to initialize multiple times with increasing delays
+        setTimeout(initializeQuizManager, 100);
+        setTimeout(initializeQuizManager, 500);
+        setTimeout(initializeQuizManager, 1000);
 
         // Gamification variables
         const userProfile = {
@@ -738,10 +751,21 @@
         }
 
         function startGame() {
+            console.log('🎮 Attempting to start game...');
+
             if (!quizManager) {
-                console.error('QuizManager not initialized yet');
-                return;
+                console.error('❌ QuizManager not initialized yet');
+
+                // Try to initialize one more time
+                initializeQuizManager();
+
+                if (!quizManager) {
+                    alert('⚠️ El sistema no está listo aún. Por favor, espera unos segundos y vuelve a intentar.');
+                    return;
+                }
             }
+
+            console.log('✅ QuizManager available, starting game...');
 
             questionCount = parseInt(questionCountInput.value, 10);
             timePerQuestion = parseInt(timeLimitInput.value, 10);
@@ -875,7 +899,7 @@
 
                 onScoreUpdate: (newScore, points) => {
                     score = newScore;
-                    scoreElement.textContent = score;
+                    scoreDisplay.textContent = `Puntos: ${score}`;
 
                     // Add XP for gamification
                     addXP(Math.floor(points / 10));

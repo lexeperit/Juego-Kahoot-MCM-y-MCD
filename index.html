@@ -503,8 +503,14 @@
 
         <!-- Pantalla del Quiz -->
         <div id="quiz-screen" class="hidden">
-            <div class="flex justify-between items-center bg-white text-gray-800 p-4 rounded-t-lg font-title">
-                <div id="question-counter" class="text-xl font-bold">1 de 10</div>
+            <div class="flex justify-between items-center glass-strong text-white p-4 rounded-t-lg font-title">
+                <div class="flex items-center gap-4">
+                    <button id="exit-quiz-btn" class="glass modern-card px-4 py-2 hover-lift text-sm font-semibold">
+                        <i class="fas fa-arrow-left mr-2"></i>
+                        Salir
+                    </button>
+                    <div id="question-counter" class="text-xl font-bold">1 de 10</div>
+                </div>
                 <div class="text-2xl font-black">Desafío MCM y MCD</div>
                 <div id="score" class="text-xl font-bold">Puntos: 0</div>
             </div>
@@ -1506,6 +1512,31 @@
                                 </div>
                             </div>
 
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-orange-300 mb-4 flex items-center step-title" data-step="12">
+                                    <span class="bg-orange-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">4</span>
+                                    Verificación completa del problema
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-orange-300/30" data-step="12" style="display: none;">
+                                    <div class="space-y-4">
+                                        <p class="text-lg text-center">Vamos a verificar que todos los requisitos se cumplen:</p>
+                                        <div class="bg-gradient-to-r from-blue-500/20 to-indigo-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-blue-300">Requisitos del problema:</h6>
+                                            <p class="mb-2">✅ Mismo número de artículos en cada estuche</p>
+                                            <p class="mb-2">✅ Mayor cantidad de estuches posible (16 es el MCD)</p>
+                                            <p class="mb-2">✅ Se usan todos los artículos sin desperdiciar</p>
+                                        </div>
+                                        <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg text-center">
+                                            <p class="text-xl font-bold mb-2">Resultado final:</p>
+                                            <p class="text-lg">📦 16 estuches</p>
+                                            <p class="text-lg">✏️ 3 bolígrafos por estuche</p>
+                                            <p class="text-lg">✏️ 4 lápices por estuche</p>
+                                            <p class="font-bold text-green-300 mt-2">¡Problema resuelto perfectamente!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="text-center mt-6">
                                 <button class="btn-modern text-lg py-3 px-8 exercise-btn" data-exercise="3">
                                     <i class="fas fa-play mr-2"></i>
@@ -1534,11 +1565,11 @@
 
                         <div class="space-y-6">
                             <div class="step-container">
-                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="12">
+                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="13">
                                     <span class="bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
                                     Reconocer números primos entre sí
                                 </h5>
-                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="12" style="display: none;">
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="13" style="display: none;">
                                     <div class="space-y-4">
                                         <p class="text-lg">Dos números son <strong>primos entre sí</strong> cuando su único divisor común es 1.</p>
                                         <div class="bg-gradient-to-r from-blue-500/20 to-cyan-500/20 p-4 rounded-lg">
@@ -1551,11 +1582,11 @@
                             </div>
 
                             <div class="step-container">
-                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="13">
+                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="14">
                                     <span class="bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
                                     Aplicar regla especial
                                 </h5>
-                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="13" style="display: none;">
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="14" style="display: none;">
                                     <div class="space-y-4">
                                         <div class="bg-gradient-to-r from-yellow-500/30 to-orange-500/30 p-6 rounded-xl border border-yellow-300/50 text-center">
                                             <h6 class="text-xl font-bold text-yellow-300 mb-4">🔥 Regla de Oro para Números Primos</h6>
@@ -1567,6 +1598,58 @@
                                         </div>
                                         <div class="bg-green-500/20 p-4 rounded-lg text-center">
                                             <p class="text-2xl font-bold text-green-300">MCM(7, 13) = 7 × 13 = 91</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="15">
+                                    <span class="bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
+                                    Verificar que son primos entre sí
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="15" style="display: none;">
+                                    <div class="space-y-4">
+                                        <p class="text-lg">Verificamos que 7 y 13 efectivamente no comparten factores:</p>
+                                        <div class="grid md:grid-cols-2 gap-6">
+                                            <div class="bg-blue-500/20 p-4 rounded-lg">
+                                                <h6 class="font-bold text-center mb-3 text-blue-300">Factores de 7</h6>
+                                                <div class="text-center">
+                                                    <p class="mb-2">7 es primo</p>
+                                                    <p class="font-bold text-green-300">Factores: 1, 7</p>
+                                                </div>
+                                            </div>
+                                            <div class="bg-purple-500/20 p-4 rounded-lg">
+                                                <h6 class="font-bold text-center mb-3 text-purple-300">Factores de 13</h6>
+                                                <div class="text-center">
+                                                    <p class="mb-2">13 es primo</p>
+                                                    <p class="font-bold text-green-300">Factores: 1, 13</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg text-center">
+                                            <p class="font-bold text-yellow-300">✅ Factor común: solo el 1</p>
+                                            <p class="text-sm">Por lo tanto, MCD(7, 13) = 1</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-pink-300 mb-4 flex items-center step-title" data-step="16">
+                                    <span class="bg-pink-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">4</span>
+                                    Calcular el MCM directamente
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-pink-300/30" data-step="16" style="display: none;">
+                                    <div class="text-center">
+                                        <div class="bg-gradient-to-r from-orange-500/30 to-red-500/30 p-6 rounded-xl border border-orange-300/50">
+                                            <p class="text-2xl mb-4">Como son primos entre sí:</p>
+                                            <p class="text-2xl mb-4">MCM(7, 13) = 7 × 13</p>
+                                            <p class="text-4xl font-bold text-orange-300">= 91</p>
+                                        </div>
+                                        <div class="mt-4 bg-green-500/20 p-4 rounded-lg">
+                                            <p class="font-bold text-yellow-300">✅ Respuesta: MCM(7, 13) = 91</p>
+                                            <p class="text-sm text-gray-300">Verificación: 91 ÷ 7 = 13 ✓, 91 ÷ 13 = 7 ✓</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1601,11 +1684,11 @@
 
                         <div class="space-y-6">
                             <div class="step-container">
-                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="14">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="17">
                                     <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">1</span>
                                     Recordar la fórmula mágica
                                 </h5>
-                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="14" style="display: none;">
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="17" style="display: none;">
                                     <div class="text-center">
                                         <div class="bg-gradient-to-r from-purple-500/30 to-pink-500/30 p-6 rounded-xl border border-purple-300/50">
                                             <h6 class="text-2xl font-bold text-purple-300 mb-4">🔮 Fórmula Mágica</h6>
@@ -1616,11 +1699,11 @@
                             </div>
 
                             <div class="step-container">
-                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="15">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="18">
                                     <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">2</span>
                                     Sustituir valores conocidos
                                 </h5>
-                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="15" style="display: none;">
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="18" style="display: none;">
                                     <div class="space-y-4">
                                         <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg">
                                             <p class="text-lg mb-2"><strong>Datos conocidos:</strong></p>
@@ -1638,11 +1721,11 @@
                             </div>
 
                             <div class="step-container">
-                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="16">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="19">
                                     <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">3</span>
                                     Resolver la ecuación
                                 </h5>
-                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="16" style="display: none;">
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="19" style="display: none;">
                                     <div class="text-center">
                                         <div class="bg-gradient-to-r from-orange-500/30 to-red-500/30 p-6 rounded-xl border border-orange-300/50">
                                             <p class="text-2xl mb-4">12 × B = 4 × 60</p>
@@ -1653,6 +1736,30 @@
                                         <div class="mt-4 bg-green-500/20 p-4 rounded-lg">
                                             <p class="font-bold text-yellow-300">✅ El otro número es 20</p>
                                             <p class="text-sm text-gray-300">Verificación: 12 × 20 = 240, y 4 × 60 = 240 ✓</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-container">
+                                <h5 class="text-xl font-bold text-cyan-300 mb-4 flex items-center step-title" data-step="20">
+                                    <span class="bg-cyan-500 text-white rounded-full w-8 h-8 flex items-center justify-center mr-3 text-sm">4</span>
+                                    Verificar usando la fórmula mágica
+                                </h5>
+                                <div class="step-content bg-black/30 p-4 rounded-lg border border-cyan-300/30" data-step="20" style="display: none;">
+                                    <div class="space-y-4">
+                                        <p class="text-lg text-center">Vamos a verificar que nuestros valores son correctos:</p>
+                                        <div class="bg-gradient-to-r from-purple-500/20 to-indigo-500/20 p-4 rounded-lg">
+                                            <h6 class="font-bold text-center mb-3 text-purple-300">Verificación con MCD y MCM</h6>
+                                            <p class="text-center mb-2">Los números encontrados: 12 y 20</p>
+                                            <p class="text-center mb-2">MCD(12, 20) = 4 ✓ (dado)</p>
+                                            <p class="text-center mb-2">MCM(12, 20) = 60 ✓ (dado)</p>
+                                        </div>
+                                        <div class="bg-gradient-to-r from-green-500/20 to-teal-500/20 p-4 rounded-lg text-center">
+                                            <p class="text-xl font-bold mb-2">Aplicando la fórmula mágica:</p>
+                                            <p class="text-lg">12 × 20 = 4 × 60</p>
+                                            <p class="text-lg">240 = 240 ✅</p>
+                                            <p class="font-bold text-green-300 mt-2">¡La fórmula se cumple perfectamente!</p>
                                         </div>
                                     </div>
                                 </div>
@@ -1709,8 +1816,16 @@
         }
 
         function showExerciseSteps(exerciseNum) {
-            const startStep = (exerciseNum - 1) * 4 + 1;
-            const endStep = exerciseNum * 4;
+            // Define step ranges for each exercise
+            const exerciseSteps = {
+                1: { start: 1, end: 4 },    // Ejercicio 1: pasos 1-4
+                2: { start: 5, end: 8 },    // Ejercicio 2: pasos 5-8
+                3: { start: 9, end: 12 },   // Ejercicio 3: pasos 9-12
+                4: { start: 13, end: 16 },  // Ejercicio 4: pasos 13-16
+                5: { start: 17, end: 20 }   // Ejercicio 5: pasos 17-20
+            };
+
+            const { start: startStep, end: endStep } = exerciseSteps[exerciseNum];
 
             // Hide button
             const btn = document.querySelector(`[data-exercise="${exerciseNum}"]`);
@@ -1738,6 +1853,27 @@
         function closeStudyMaterial() {
             studyMaterialContainer.classList.add('hidden');
             startScreen.classList.remove('hidden');
+        }
+
+        function exitQuiz() {
+            // Clear timer
+            clearInterval(timerInterval);
+
+            // Hide quiz screen and show start screen
+            quizScreen.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            studyMaterialContainer.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+
+            // Reset quiz state
+            currentQuestionIndex = 0;
+            score = 0;
+            correctStreak = 0;
+            mcmCorrect = 0;
+            mcdCorrect = 0;
+
+            // Update display
+            scoreDisplay.textContent = `Puntos: ${score}`;
         }
 
         // Particles.js configuration
@@ -1804,6 +1940,14 @@
         viewSolutionsBtn.addEventListener('click', showSolutions);
         viewReferencesBtn.addEventListener('click', showReferences);
         closeStudyBtn.addEventListener('click', closeStudyMaterial);
+
+        // Exit quiz button
+        document.addEventListener('DOMContentLoaded', () => {
+            const exitQuizBtn = document.getElementById('exit-quiz-btn');
+            if (exitQuizBtn) {
+                exitQuizBtn.addEventListener('click', exitQuiz);
+            }
+        });
 
         answerButtons.forEach(button => {
             button.addEventListener('click', selectAnswer);
